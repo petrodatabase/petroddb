@@ -1,0 +1,20 @@
+<h2 md-dialog-title>{{data['title'] || 'Confirm your choice'}}</h2>
+
+<md-dialog-content>
+
+	<p>{{data.content}}</p>
+</md-dialog-content>
+
+<!--<md-dialog-actions [attr.align]="actionsAlignment">-->
+<md-dialog-actions >
+	<button
+			md-raised-button
+			color="primary"
+			(click)="onCloseCancel()">Decline
+	</button>
+	<button
+			md-raised-button
+			color="accent"
+			(click)="onCloseConfirm()">Confirm
+	</button>
+</md-dialog-actions>

@@ -1,0 +1,32 @@
+<h2 md-dialog-title>Select An Image</h2>
+
+<md-dialog-content>
+	<md-grid-list cols="3" rowHeight="200px">
+		<md-grid-tile *ngFor="let img of data">
+			<img [alt]="img.img_name" src="{{globals.uploadHost}}/{{img.sp_id}}/{{img.$key}}/{{img.stored_file_name}}" (click)="selectImage(img)" [ngClass]="{'selected-image': selectedImage === img}">
+			<md-grid-tile-footer>
+				<h3 md-line>{{img.img_name}}</h3>
+				<span md-line>Category: {{img.img_cat}}</span>
+				<md-icon>star_border</md-icon>
+			</md-grid-tile-footer>
+		</md-grid-tile>
+	</md-grid-list>
+	<p>
+		Selected Image: {{selectedImage?.img_name}}
+	</p>
+</md-dialog-content>
+
+<!--<md-dialog-actions [attr.align]="actionsAlignment">-->
+<md-dialog-actions>
+	<button
+			md-raised-button
+			color="primary"
+			md-dialog-close
+			(click)="onCloseCancel()"
+	>Close
+	</button>
+	<button color="warn" (click)="onCloseConfirm()" md-raised-button>
+		Confirm
+	</button>
+
+</md-dialog-actions>

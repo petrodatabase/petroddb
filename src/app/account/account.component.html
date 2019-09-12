@@ -1,0 +1,95 @@
+<!--<div class="card-container" fxLayout="row wrap" fxLayoutAlign="space-around center" >-->
+<div class="card-container">
+	<!--<div fxLayout="row" fxLayoutAlign="space-around center" >	-->
+	<div fxFlex="100">
+		<md-card
+		>
+			<md-card-title>Account</md-card-title>
+			<md-card-content>
+				<div *ngIf="user">
+					<h2>{{user.displayName}}</h2>
+
+					<md-input-container>
+						<input mdInput
+							   placeholder="First Name"
+							   id="us_first"
+							   name="us_first"
+							   [(ngModel)]="user.us_first"
+							   type="text"
+							   required
+							   [disabled]="!isEditting"
+						>
+						<!-- TODO for array -->
+						<md-error>This field is required</md-error>
+					</md-input-container>
+					<md-input-container>
+						<input mdInput
+							   placeholder="Family Name"
+							   id="us_family"
+							   name="us_family"
+							   [(ngModel)]="user.us_family"
+							   type="text"
+							   required
+							   [disabled]="!isEditting"
+						>
+						<!-- TODO for array -->
+						<md-error>This field is required</md-error>
+					</md-input-container>
+
+					<md-input-container>
+						<input mdInput
+							   placeholder="Email"
+							   id="email"
+							   name="email"
+							   [(ngModel)]="user.email"
+							   type="text"
+							   required
+							   [disabled]="true"
+						>
+						<!-- TODO for array -->
+						<md-error>This field is required</md-error>
+					</md-input-container>
+
+          <section>
+            <md-checkbox class="example-margin" [(ngModel)]="user.us_is_pi" [disabled]="!isEditting">Principal Investigator</md-checkbox>
+            <md-checkbox class="example-margin" [(ngModel)]="user.us_is_re" [disabled]="!isEditting">Researcher</md-checkbox>
+          </section>
+
+					<md-form-field>
+						<textarea mdInput placeholder="Notes" [(ngModel)]="user.us_note" [disabled]="!isEditting"></textarea>
+					</md-form-field>
+					<md-form-field>
+						<textarea mdInput placeholder="Bibliography" [(ngModel)]="user.us_biblio" [disabled]="!isEditting"></textarea>
+					</md-form-field>
+
+				</div>
+			</md-card-content>
+			<md-card-actions>
+				<md-slide-toggle
+						*ngIf="user"
+						class="example-margin"
+						[color]="'primary'"
+						[checked]="isEditting"
+						(change)="isEditting = !isEditting"
+				>
+					EDIT
+				</md-slide-toggle>
+				<button md-raised-button *ngIf="isEditting" (click)="updateChange()">Save</button>
+			</md-card-actions>
+		</md-card>
+	</div>
+  <div fxFlex="100">
+		<md-card>
+			<md-card-title>Projects</md-card-title>
+			<md-card-content>
+				<button md-raised-button color="primary" (click)="getProjectList()" *ngIf="!projectList">Load Projects</button>
+				<app-project-sample-table *ngIf="projectList" [projs]="projectList" [allowLoadSample]="true"></app-project-sample-table>
+			</md-card-content>
+			<md-card-footer>
+				<!--<md-progress-bar mode="indeterminate" *ngIf="projectLoading"></md-progress-bar>-->
+			</md-card-footer>
+		</md-card>
+	</div>
+
+
+</div>

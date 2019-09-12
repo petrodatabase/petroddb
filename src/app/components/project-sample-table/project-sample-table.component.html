@@ -1,0 +1,71 @@
+<!--<div class="example-container mat-elevation-z8" [ngStyle]="{'max-width': _width + 'px'}">-->
+<div class="example-container mat-elevation-z8" [ngStyle]="{'width': '100%'}">
+  <div class="example-header">
+    <md-form-field floatPlaceholder="never">
+      <input mdInput #proj_filter placeholder="Search Project">
+    </md-form-field>
+  </div>
+
+  <md-table #table mdSort [dataSource]="dataSource" [ngStyle]="{'max-height': _height + 'px'}">
+
+    <!--- Note that these columns can be defined in any order.
+		  The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- ID Column -->
+    <!--<ng-container mdColumnDef="">-->
+    <!--<md-header-cell *mdHeaderCellDef> ID </md-header-cell>-->
+    <!--<md-cell *mdCellDef="let row"> {{row.id}} </md-cell>-->
+    <!--</ng-container>-->
+
+    <!-- Progress Column -->
+    <!--<ng-container mdColumnDef="select">-->
+    <!--<md-header-cell *mdHeaderCellDef> Select</md-header-cell>-->
+    <!--<md-cell *mdCellDef="let row">-->
+    <!--<md-checkbox-->
+    <!--[(ngModel)]="selected[row.$key]">-->
+    <!--&lt;!&ndash;[disabled]="disabled">&ndash;&gt;-->
+    <!--</md-checkbox>-->
+    <!--</md-cell>-->
+    <!--</ng-container>-->
+
+    <ng-container mdColumnDef="proj_name">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Name</md-header-cell>
+      <md-cell *mdCellDef="let row">
+        <a md-raised-button target="_blank" class="link-button" [routerLink]="['/access/project/' + row.$key]">
+          <span class="link-label">{{row.proj_name}}</span>
+        </a>
+      </md-cell>
+    </ng-container>
+    <ng-container mdColumnDef="proj_date">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Date</md-header-cell>
+      <md-cell *mdCellDef="let row"> {{row.proj_date}}</md-cell>
+    </ng-container>
+    <ng-container mdColumnDef="proj_des">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Description</md-header-cell>
+      <md-cell *mdCellDef="let row"> {{row.proj_des}}</md-cell>
+    </ng-container>
+    <ng-container mdColumnDef="sp_list" *ngIf="allowLoadSample">
+      <md-header-cell *mdHeaderCellDef> Samples</md-header-cell>
+      <md-cell *mdCellDef="let row">
+        <button md-raised-button color="primary" (click)="loadSamples(row)" *ngIf="!row.proj_sp_ids || row.proj_sp_ids.length == 0">Load</button>
+        <div class="link-list" *ngIf="row.proj_sp_ids">
+					<a md-button class="link-button" role="link" *ngFor="let sp of row.proj_sp_ids" [routerLink]="['/access/sample/' + sp.$key]">
+						<span class="link-label">{{sp.sp_name}}</span>
+					</a>
+				</div>
+      </md-cell>
+    </ng-container>
+
+
+    <!--<ng-container mdColumnDef="ref_name">-->
+    <!--<md-header-cell *mdHeaderCellDef> Name</md-header-cell>-->
+    <!--<md-cell *mdCellDef="let row"> {{row.ref_name}}</md-cell>-->
+    <!--</ng-container>-->
+
+    <!-- Name Column -->
+
+
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+</div>

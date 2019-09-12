@@ -1,0 +1,7 @@
+<h2>Sample References</h2>
+<app-publication-table *ngIf="pubList && loaded" [pubs]="pubList" [allowDelete]="true" (onDeleteSelected)="onDeletedSelected($event)"></app-publication-table>
+<button md-raised-button="" *ngIf="!allPubList" (click)="loadAllPubs()">Load All References</button>
+
+<h2 *ngIf="allPubList">All References</h2>
+<app-publication-table *ngIf="allPubList" [pubs]="allPubList" [allowSelect]="true" (onSelected)="onAllSelected($event)"></app-publication-table>
+

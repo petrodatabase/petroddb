@@ -1,0 +1,66 @@
+<h2 md-dialog-title>Point Analysis Chart</h2>
+
+<md-dialog-content #dialogContent>
+	<style>
+		.mat-dialog-container {
+			max-width: none;
+		}
+
+	</style>
+	<md-tab-group class="tab-group" dynamicHeight>
+		<md-tab>
+			<ng-template md-tab-label>Chart</ng-template>
+			<div class="tab-content" [ngStyle]="{'width': width + 'px', 'height': height + 'px'}">
+				<!--<canvas baseChart height="250" width="700"-->
+						<!--*ngIf="data['pointAlys'] && data.pointAlys.length > 0"-->
+						<!--[datasets]="chartConfig.data"-->
+						<!--[labels]="chartConfig.labels"-->
+						<!--[options]="chartConfig.options"-->
+						<!--[legend]="chartConfig.legend"-->
+						<!--[chartType]="chartConfig.type"-->
+						<!--(chartHover)="chartConfig.click($event)"-->
+						<!--(chartClick)="chartConfig.hover($event)"></canvas>-->
+				<app-point-aly-chart [pointAlys]="data.pointAlys" [chart]="data.chart" [width]="width" [height]="height"></app-point-aly-chart>
+			</div>
+		</md-tab>
+		<md-tab>
+			<ng-template md-tab-label>Data source</ng-template>
+			<div class="tab-content"  [ngStyle]="{'width': width + 'px', 'height': height + 'px'}">
+				<!--<app-signup></app-signup>-->
+				<app-aly-table [alys]="filterAlys" [width]="width" [height]="height"></app-aly-table>
+			</div>
+		</md-tab>
+
+	</md-tab-group>
+
+
+</md-dialog-content>
+
+<md-dialog-actions >
+	<button
+			md-raised-button
+			color="primary"
+			(click)="onCloseCancel()">Close
+	</button>
+	<button *ngIf="savable"
+			md-raised-button
+			color="accent"
+			(click)="onCloseSave()">Save
+	</button>
+
+	<!--<button color="warn" (click)="onCloseConfirm()">-->
+	<!--Confirm-->
+	<!--</button>-->
+
+	<!--<a-->
+	<!--md-button-->
+	<!--color="primary"-->
+	<!--href="https://en.wikipedia.org/wiki/Neptune"-->
+	<!--target="_blank">Read more on Wikipedia</a>-->
+	<!--<button-->
+	<!--md-button-->
+	<!--color="secondary"-->
+	<!--(click)="showInStackedDialog()">-->
+	<!--Show in Dialog-->
+	<!--</button>-->
+</md-dialog-actions>

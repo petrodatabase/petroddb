@@ -1,0 +1,387 @@
+<md-tab-group class="tab-group" dynamicHeight [(selectedIndex)]="modeTabIndex">
+	<md-tab>
+		<ng-template md-tab-label>Single Upload</ng-template>
+		<div class="tab-content">
+			<form [formGroup]="singleForm" (ngSubmit)="onSingleSubmit()">
+				<div class="input-field" mdTooltip="{{schema['proj']['tooltip'] || 'proj'}}">
+					<md-select
+							placeholder="{{schema['proj']['placeholder'] || 'proj'}}"
+							formControlName="proj"
+							id="proj"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let proj of projectList || []" [value]="proj.$key">
+							{{proj.proj_name}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div class="input-field" mdTooltip="{{schema['vd']['tooltip'] || 'vd'}}">
+					<md-select
+							placeholder="{{schema['vd']['placeholder'] || 'vd'}}"
+							formControlName="vd"
+							id="vd"
+							(change)="onSelectVolcanoChange()"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let vol of volcanoList" [value]="vol.$key">
+							{{vol.vd_name}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div class="input-field" mdTooltip="{{schema['ed']['tooltip'] || 'ed'}}">
+					<md-select
+							placeholder="{{schema['ed']['placeholder'] || 'ed'}}"
+							formControlName="ed"
+							id="ed"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let ed of eruptionList" [value]="ed.$key">
+							{{ed.ed_stime || ed.ed_stime_bc}} - {{ed.ed_etime || ed.ed_etime_bc}} - {{ed.ed_name}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div class="input-field" mdTooltip="{{schema['sp_pi']['tooltip'] || 'sp_pi'}}">
+					<md-select
+							placeholder="{{schema['sp_pi']['placeholder'] || 'sp_pi'}}"
+							formControlName="sp_pi"
+							id="sp_pi"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let us of userPIList" [value]="us.$key">
+							{{(us.us_family != '' && us.us_first != '') ? (us.us_first + ' ' + us.us_family) : us.displayName}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div class="input-field" mdTooltip="{{schema['sp_collector']['tooltip'] || 'sp_collector'}}">
+					<md-select
+							placeholder="{{schema['sp_collector']['placeholder'] || 'sp_collector'}}"
+							formControlName="sp_collector"
+							id="sp_collector"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let us of userList" [value]="us.$key">
+							{{(us.us_family != '' && us.us_first != '') ? (us.us_first + ' ' + us.us_family) : us.displayName}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div class="input-field" mdTooltip="{{schema['sp_editor']['tooltip'] || 'sp_editor'}}">
+					<md-select
+							placeholder="{{schema['sp_editor']['placeholder'] || 'sp_editor'}}"
+							formControlName="sp_editor"
+							id="sp_editor"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let us of userList" [value]="us.$key">
+							{{(us.us_family != '' && us.us_first != '') ? (us.us_first + ' ' + us.us_family) : us.displayName}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div *ngFor="let k of singleFormIncludeFields"
+					 class="input-field"
+					 mdTooltip="{{schema[k]['tooltip'] || k}}"
+				>
+					<md-input-container
+							*ngIf="['string', 'number'].indexOf(schema[k].type) > -1"
+					>
+						<input mdInput
+							   placeholder="{{schema[k]['placeholder'] || k}}"
+							   formControlName="{{k}}"
+							   id="{{k}}"
+							   type="{{schema[k].type === 'string' ? 'text' : (schema[k].type === 'number' ? 'number' : (schema[k].type === 'boolean' ? 'checkbox' : 'text'))}}"
+						>
+						<!-- TODO for array -->
+						<md-error>This field is required</md-error>
+					</md-input-container>
+
+					<!-- Boolean -->
+					<md-checkbox
+							*ngIf="schema[k].type == 'boolean'"
+							formControlName="{{k}}"
+							id="{{k}}"
+					>
+						{{schema[k]['placeholder'] || k}}
+					</md-checkbox>
+
+					<!-- Checkbox -->
+					<!--<div-->
+							<!--class="card-container"-->
+							<!--*ngIf="schema[k].type == 'array' && (schema[k]['input'] && schema[k]['input'] == 'checkbox')"-->
+					<!--&gt;-->
+						<!--<label fxFlex="20" for="">{{schema[k]['placeholder'] || k}}</label>-->
+						<!--<div fxFlex="80">-->
+							<!--<md-selection-list>-->
+								<!--&lt;!&ndash;<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>&ndash;&gt;-->
+								<!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>-->
+								<!--<md-list-option *ngFor="let c of schema[k]['checkboxes'] || []">-->
+									<!---->
+								<!--</md-list-option>-->
+							<!--</md-selection-list>-->
+						<!--</div>-->
+					<!--</div>-->
+
+					<md-select
+							*ngIf="schema[k]['input'] && schema[k]['input'] === 'select'"
+							placeholder="{{schema[k]['placeholder'] || k}}"
+							formControlName="{{k}}"
+							id="{{k}}"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let c of schema[k]['choices'] || []" [value]="c.key">
+							{{c.value}}
+						</md-option>
+					</md-select>
+
+					<!--<br>-->
+				</div>
+
+				<!--for sp_type --->
+				<div mdTooltip="{{schema['sp_type']['tooltip'] || 'sp_type'}}">
+					<div class="card-container">
+						<label for="" fxFlex="10" class="checkbox-label">{{schema['sp_type']['placeholder']}}</label>
+						<div fxFlex="90">
+							<md-selection-list #single_sp_type>
+								<div class="check-box-div" *ngFor="let c of schema['sp_type']['checkboxes'] || []">
+									<md-list-option  [value]="c">{{c}}</md-list-option>
+								</div>
+                <div class="check-box-div">
+                  <md-input-container
+                  >
+                    <input mdInput
+                         placeholder="Other"
+                         formControlName="sp_type_other"
+                         id="sp_type_other"
+                         type="text"
+                    >
+                  </md-input-container>
+                </div>
+							</md-selection-list>
+						</div>
+						<div fxFlex="100">
+							<hr>
+						</div>
+					</div>
+				</div>
+
+				<div mdTooltip="{{schema['sp_rocktype']['tooltip'] || 'sp_rocktype'}}">
+					<div class="card-container">
+						<label for="" fxFlex="10" class="checkbox-label">{{schema['sp_rocktype']['placeholder']}}</label>
+						<div fxFlex="90">
+							<md-selection-list #single_sp_rocktype>
+                <div class="rock-title">List of Igneous Rocks</div>
+								<div class="check-box-div" *ngFor="let c of schema['sp_rocktype']['checkboxes'][0] || []">
+									<md-list-option  [value]="c">{{c}}</md-list-option>
+								</div>
+                <div class="rock-title">List of Metamorphic Rocks</div>
+                <div class="check-box-div" *ngFor="let c of schema['sp_rocktype']['checkboxes'][1] || []">
+                  <md-list-option  [value]="c">{{c}}</md-list-option>
+                </div>
+                <div class="rock-title">List of Sedimentary Rocks</div>
+                <div class="check-box-div" *ngFor="let c of schema['sp_rocktype']['checkboxes'][2] || []">
+                  <md-list-option  [value]="c">{{c}}</md-list-option>
+                </div>
+                <div class="check-box-div">
+                  <md-input-container
+                  >
+                    <input mdInput
+                         placeholder="Other"
+                         formControlName="sp_rocktype_other"
+                         id="sp_rocktype_other"
+                         type="text"
+                    >
+                  </md-input-container>
+                </div>
+							</md-selection-list>
+						</div>
+						<div fxFlex="100">
+							<hr>
+						</div>
+					</div>
+				</div>
+
+				<div mdTooltip="{{schema['sp_rockcomp']['tooltip'] || 'sp_rockcomp'}}">
+					<div class="card-container">
+						<label for="" fxFlex="10"  class="checkbox-label">{{schema['sp_rockcomp']['placeholder']}}</label>
+						<div fxFlex="90">
+							<md-selection-list #single_sp_rockcomp>
+                <div class="rock-title">Effusive Deposits</div>
+								<div class="check-box-div" *ngFor="let c of schema['sp_rockcomp']['checkboxes'][0] || []">
+									<md-list-option  [value]="c">{{c}}</md-list-option>
+								</div>
+                <div class="rock-title">Explosive Eruptions</div>
+                <div class="check-box-div" *ngFor="let c of schema['sp_rockcomp']['checkboxes'][1] || []">
+                  <md-list-option  [value]="c">{{c}}</md-list-option>
+                </div>
+                <div class="rock-title">Lahar</div>
+                <div class="check-box-div" *ngFor="let c of schema['sp_rockcomp']['checkboxes'][2] || []">
+                  <md-list-option  [value]="c">{{c}}</md-list-option>
+                </div>
+                <div class="check-box-div">
+                  <md-input-container
+                  >
+                    <input mdInput
+                         placeholder="Other"
+                         formControlName="sp_rockcomp_other"
+                         id="sp_rockcomp_other"
+                         type="text"
+                    >
+                  </md-input-container>
+                </div>
+							</md-selection-list>
+						</div>
+						<div fxFlex="100">
+							<hr>
+						</div>
+					</div>
+				</div>
+
+				<br>
+				<button type="submit" [disabled]="!singleForm.valid" md-raised-button color="primary">Submit</button>
+			</form>
+
+
+		</div>
+		<md-progress-bar
+				*ngIf="newSampleUploading"
+				[color]="primary"
+				[mode]="indeterminate"
+		>
+			<!--[bufferValue]="bufferValue">-->
+		</md-progress-bar>
+	</md-tab>
+	<!--FIXME |||||||||||||||||||||||||||||||||||||||||MULTIPLE INPUT|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||-->
+	<md-tab >
+		<ng-template md-tab-label >Multiple Upload</ng-template>
+    <!--<div class="tab-content" >This feature is currently on working progress</div>-->
+		<div class="tab-content" >
+			<form [formGroup]="multipleForm" (ngSubmit)="onMultipleSubmit()">
+
+				<div class="input-field" mdTooltip="{{schema['proj']['tooltip'] || 'proj'}}">
+					<md-select
+							placeholder="{{schema['proj']['placeholder'] || 'proj'}}"
+							formControlName="proj_multiple"
+							id="proj_multiple"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let proj of projectList || []" [value]="proj.$key">
+							{{proj.proj_name}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div class="input-field" mdTooltip="{{schema['vd']['tooltip'] || 'vd'}}">
+					<md-select
+							placeholder="{{schema['vd']['placeholder'] || 'vd'}}"
+							formControlName="vd_multiple"
+							id="vd_multiple"
+							(change)="onSelectVolcanoChange()"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let vol of volcanoList" [value]="vol.$key">
+							{{vol.vd_name}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div class="input-field" mdTooltip="{{schema['ed']['tooltip'] || 'ed'}}">
+					<md-select
+							placeholder="{{schema['ed']['placeholder'] || 'ed'}}"
+							formControlName="ed_multiple"
+							id="ed_multiple"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let ed of eruptionList" [value]="ed.$key">
+							{{ed.ed_stime || ed.ed_stime_bc}} - {{ed.ed_etime || ed.ed_etime_bc}} - {{ed.ed_name}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div class="input-field" mdTooltip="{{schema['sp_pi']['tooltip'] || 'sp_pi'}}">
+					<md-select
+							placeholder="{{schema['sp_pi']['placeholder'] || 'sp_pi'}}"
+							formControlName="sp_pi_multiple"
+							id="sp_pi_multiple"
+					>
+						<md-option [value]="">Unknown</md-option>
+						<md-option *ngFor="let us of userPIList" [value]="us.$key">
+							{{(us.us_family != '' && us.us_first != '') ? (us.us_first + ' ' + us.us_family) : us.displayName}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div *ngFor="let k of multipleFormIncludeFields"
+					 class="input-field"
+					 mdTooltip="{{schema[k]['tooltip'] || k}}"
+				>
+					<md-input-container
+							*ngIf="['string', 'number'].indexOf(schema[k].type) > -1"
+					>
+						<input mdInput
+							   placeholder="{{schema[k]['placeholder'] || k}}"
+							   formControlName="{{k}}"
+							   id="{{k}}"
+							   type="{{schema[k].type === 'string' ? 'text' : (schema[k].type === 'number' ? 'number' : (schema[k].type === 'boolean' ? 'checkbox' : 'text'))}}"
+						>
+						<!-- TODO for array -->
+						<md-error>This field is required</md-error>
+					</md-input-container>
+
+					<!-- Boolean -->
+					<md-checkbox
+							*ngIf="schema[k].type == 'boolean'"
+							formControlName="{{k}}"
+							id="{{k}}"
+					>
+						{{schema[k]['placeholder'] || k}}
+					</md-checkbox>
+
+					<!-- Checkbox -->
+					<div
+							class="card-container"
+							*ngIf="schema[k].type == 'array' && (schema[k]['input'] && schema[k]['input'] == 'checkbox')"
+					>
+						<label fxFlex="20" for="">{{schema[k]['placeholder'] || k}}</label>
+						<div fxFlex="80">
+							<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>
+						</div>
+					</div>
+
+					<md-select
+							*ngIf="schema[k]['input'] && schema[k]['input'] === 'select'"
+							placeholder="{{schema[k]['placeholder'] || k}}"
+							formControlName="{{k}}"
+							id="{{k}}"
+					>
+						<md-option *ngFor="let c of schema[k]['choices'] || []" [value]="c.key">
+							{{c.value}}
+						</md-option>
+					</md-select>
+				</div>
+
+				<div mdTooltip="Multiple sample excel file">
+					<div class="card-container">
+						<label for="" fxFlex="10" class="checkbox-label">Upload file</label>
+						<div class="input-field" fxFlex="90" style="margin-top: 10px">
+							Only Excel files (.xls, .xlsx) are allowed. Please see <a href="/assets/excels/Sample_Template_New.xlsx" download>example file</a>.
+							<input type="file" id="multiple-sample" name="multiple-sample" #multipleFile (change)="onMultipleFileChange($event)">
+						</div>
+					</div>
+				</div>
+				<br>
+				<button type="submit" [disabled]="!multipleForm.valid" md-raised-button color="primary">Upload multiple samples</button>
+			</form>
+		</div>
+		<md-progress-bar
+				*ngIf="newSampleUploading"
+				[color]="primary"
+				[mode]="indeterminate"
+		>
+			<!--[bufferValue]="bufferValue">-->
+		</md-progress-bar>
+	</md-tab>
+</md-tab-group>

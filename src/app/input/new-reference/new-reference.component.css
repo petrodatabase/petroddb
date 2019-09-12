@@ -1,0 +1,16 @@
+md-input-container {
+	width: 100%;
+}
+
+md-checkbox {
+	margin: 0 10px;
+}
+
+.input-field {
+	display: inline-block;
+	width: 49%;
+}
+.card-container {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}

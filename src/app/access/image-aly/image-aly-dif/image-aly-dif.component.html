@@ -1,0 +1,32 @@
+<div class="dif-container">
+	<md-card>
+		<md-card-content>
+			<md-slide-toggle [checked]="editting" (change)="editting = !editting">Edit</md-slide-toggle>
+			<md-input-container>
+				<input type="text" mdInput [disabled]="!editting" [(ngModel)]="_diffusion.dif_name" placeholder="Diffusion Name" required>
+				<md-error>This field is required</md-error>
+			</md-input-container>
+			<md-input-container>
+				<input type="text" mdInput [disabled]="!editting" [(ngModel)]="_diffusion.dif_comment" placeholder="Comment" required>
+				<!--<md-error>This field is required</md-error>-->
+			</md-input-container>
+
+
+			<md-select [(ngModel)]="_diffusion.dif_instrument" [disabled]="!editting" placeholder="Instrument">
+				<md-option *ngFor="let instr of schema.dif_instrument['choices'] || []" [value]="instr">
+					{{instr}}
+				</md-option>
+			</md-select>
+
+			<button md-raised-button *ngIf="editting" (click)="saveDif()">Save</button>
+		</md-card-content>
+		<md-card-footer *ngIf="loading">
+			<md-progress-bar mode="indeterminate"></md-progress-bar>
+		</md-card-footer>
+	</md-card>
+	<md-card>
+		<md-card-content>
+			<app-dif-chart [diffusion]="_diffusion"></app-dif-chart>
+		</md-card-content>
+	</md-card>
+</div>

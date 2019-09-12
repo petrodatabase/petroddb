@@ -1,0 +1,24 @@
+<form [formGroup]="loginForm" (submit)="onSubmit()">
+	<md-input-container>
+		<input mdInput placeholder="Email" formControlName="email" id="email" type="email">
+		<md-error>This field is required</md-error>
+	</md-input-container>
+	<md-input-container>
+		<input mdInput placeholder="Password" formControlName="password" id="password" type="password">
+		<md-error>This field is required</md-error>
+	</md-input-container>
+	<!--<md-input-container>-->
+		<button type="submit" md-raised-button color="primary">Submit</button>
+	<!--</md-input-container>-->
+
+	<!--<label for="firstName">First Name</label>-->
+	<!--<input type="text" id="firstName" formControlName="firstName">-->
+	<!--<label for="lastName">Last Name</label>-->
+	<!--<input type="text" id="lastName" formControlName="lastName">-->
+	<!--<label for="email">Email</label>-->
+	<!--<input type="email" id="email" formControlName="email">-->
+	<!--<label for="password">Password</label>-->
+	<!--<input type="password" id="password" formControlName="password">-->
+	<!--<button type="submit" [disabled]="!myForm.valid">Submit</button>-->
+</form>
+<md-progress-bar mode="indeterminate" *ngIf="loginLoading"></md-progress-bar>

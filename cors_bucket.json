@@ -1,0 +1,20 @@
+[
+  {
+    "origin": [
+      "https://eos-volcano-petrology.firebaseapp.com"
+    ],
+    "method": [
+      "GET"
+    ],
+    "maxAgeSeconds": 3600
+  },
+  {
+    "origin": [
+      "http://localhost:4444"
+    ],
+    "method": [
+      "GET"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]

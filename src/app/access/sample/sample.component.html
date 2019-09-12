@@ -1,0 +1,466 @@
+<div class="card-container" *ngIf="!!sample && !!permission && permission!= modelPermission.INVISIBLE">
+  <div fxFlex="100">
+    <md-card>
+      <!--<md-card-title>Display</md-card-title>-->
+      <md-card-content>
+        <!--<img src="/assets/img/volcanoes-masthead.png" alt="Volcano">-->
+        <a md-button [routerLink]="['/access/display']">
+          Display
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <a md-button [routerLink]="['/access/volcano/' + sample.vd['$key']]">
+          {{sample.vd['vd_name']}}
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <a md-button [routerLink]="['/access/project/' + sample.proj.$key]">
+          {{sample.proj.proj_name}}
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <a md-button [disabled]="true">
+          {{sample.sp_name}}
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+
+        <!-- FIXME: baseon router >>>> next and next -->
+      </md-card-content>
+    </md-card>
+  </div>
+
+  <div fxFlex="100">
+    <!--FIXME: separate component-->
+    <md-card
+    >
+      <md-card-title>Sample: {{sample.sp_name}}</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <div class="google-map" id="volcano-map">
+          <!-- this creates a google map on the page with the given lat/lng from -->
+          <!-- the component as the initial center of the map: -->
+          <agm-map [latitude]="sample.sp_lat" [longitude]="sample.sp_lon" [zoom]="12" [minZoom]="4">
+            <!--FIXME: should be other samples from the same volcanos-->
+            <agm-marker [latitude]="sample.sp_lat" [longitude]="sample.sp_lon" [iconUrl]="'/assets/img/sample_icon.png'">
+              <!--<agm-snazzy-info-window [maxWidth]="200" [closeWhenOthersOpen]="true">-->
+              <!--<ng-template>-->
+              <!--<button md-button >Access Sample</button>-->
+              <!--</ng-template>-->
+              <!--</agm-snazzy-info-window>-->
+            </agm-marker>
+            <!--<agm-marker [latitude]="volcano.vd_inf_slat" [longitude]="volcano.vd_inf_slon"></agm-marker>-->
+            <!--<agm-marker [latitude]="volcano.vd_inf_slat + 0.005" [longitude]="volcano.vd_inf_slon + 0.005"></agm-marker>-->
+          </agm-map>
+        </div>
+
+        <p>
+          Map overlay list
+        </p>
+      </md-card-content>
+
+      <!--<md-card-actions>-->
+      <!--<button md-button>LIKE</button>-->
+      <!--<button md-button>SHARE</button>-->
+      <!--</md-card-actions>-->
+      <!--<md-card-footer>-->
+      <!--<md-progress-bar mode="indeterminate"></md-progress-bar>-->
+      <!--</md-card-footer>-->
+    </md-card>
+  </div>
+
+
+  <div fxFlex="100">
+    <md-card>
+      <md-card-title>Information</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <div>
+          <div class="input-field" mdTooltip="{{schema['proj']['tooltip'] || 'proj'}}">
+            <md-input-container
+            >
+              <input mdInput
+                     placeholder="{{schema['proj']['placeholder'] || 'proj'}}"
+                     id="{{'proj'}}"
+                     [(ngModel)]="sample['proj'].proj_name"
+                     [disabled]="true"
+                     type="text"
+              >
+              <!--formControlName="{{k}}"-->
+
+              <!-- TODO for array -->
+              <md-error>This field is required</md-error>
+            </md-input-container>
+          </div>
+
+          <div class="input-field" mdTooltip="{{schema['vd']['tooltip'] || 'vd'}}">
+            <md-input-container
+            >
+              <input mdInput
+                     placeholder="{{schema['vd']['placeholder'] || 'vd'}}"
+                     id="{{'vd'}}"
+                     [(ngModel)]="sample['vd'].vd_name"
+                     [disabled]="true"
+                     type="text"
+              >
+              <!--formControlName="{{k}}"-->
+
+              <!-- TODO for array -->
+              <md-error>This field is required</md-error>
+            </md-input-container>
+          </div>
+
+          <div class="input-field" mdTooltip="{{schema['ed']['tooltip'] || 'ed'}}">
+            <md-select
+              placeholder="{{schema['ed']['placeholder'] || 'ed'}}"
+              [(ngModel)]="sample['ed'].$key"
+              id="ed"
+              [disabled]="!isEditting || !authenticatedSample || !authenticatedSample"
+            >
+              <md-option [value]="">Unknown</md-option>
+              <md-option *ngFor="let ed of eruptionList" [value]="ed.$key">
+                {{ed.ed_stime || ed.ed_stime_bc}} - {{ed.ed_etime || ed.ed_etime_bc}} - {{ed.ed_name}}
+              </md-option>
+            </md-select>
+          </div>
+
+          <div class="input-field" mdTooltip="{{schema['sp_pi']['tooltip'] || 'sp_pi'}}">
+            <md-input-container
+            >
+              <input mdInput
+                     placeholder="{{schema['sp_pi']['placeholder'] || 'sp_pi'}}"
+                     id="{{'sp_pi'}}"
+                     [(ngModel)]="sample['sp_pi'].displayName"
+                     [disabled]="true"
+                     type="text"
+              >
+              <!--formControlName="{{k}}"-->
+
+              <!-- TODO for array -->
+              <md-error>This field is required</md-error>
+            </md-input-container>
+          </div>
+
+          <div class="input-field" mdTooltip="{{schema['sp_collector']['tooltip'] || 'sp_collector'}}">
+            <md-input-container
+            >
+              <input mdInput
+                     placeholder="{{schema['sp_collector']['placeholder'] || 'sp_collector'}}"
+                     id="{{'sp_collector'}}"
+                     [(ngModel)]="sample['sp_collector'].displayName"
+                     [disabled]="true"
+                     type="text"
+              >
+              <!--formControlName="{{k}}"-->
+
+              <!-- TODO for array -->
+              <md-error>This field is required</md-error>
+            </md-input-container>
+          </div>
+
+          <div class="input-field" mdTooltip="{{schema['sp_editor']['tooltip'] || 'sp_editor'}}">
+            <md-input-container
+            >
+              <input mdInput
+                     placeholder="{{schema['sp_editor']['placeholder'] || 'sp_editorx'}}"
+                     id="{{'sp_editor'}}"
+                     [(ngModel)]="sample['sp_editor'].displayName"
+                     [disabled]="true"
+                     type="text"
+              >
+              <!--formControlName="{{k}}"-->
+
+              <!-- TODO for array -->
+              <md-error>This field is required</md-error>
+            </md-input-container>
+          </div>
+
+          <div *ngFor="let k of formIncludeFields"
+               class="input-field"
+               mdTooltip="{{schema[k]['tooltip'] || k}}"
+          >
+            <md-input-container
+              *ngIf="['string', 'number'].indexOf(schema[k].type) > -1"
+            >
+              <input mdInput
+                     *ngIf="schema[k].type != 'boolean'"
+                     placeholder="{{schema[k]['placeholder'] || k}}"
+                     id="{{k}}"
+                     [(ngModel)]="sample[k]"
+                     (change)="schema[k].type === 'number' ? sample[k] = stringParseFloat(sample[k]) : null"
+                     [disabled]="!isEditting || !authenticatedSample || !authenticatedSample"
+                     type="{{schema[k].type === 'string' ? 'text' : (schema[k].type === 'number' ? 'number' : (schema[k].type === 'boolean' ? 'checkbox' : 'text'))}}"
+              >
+              <!--class="example-margin"-->
+
+              <!--formControlName="{{k}}"-->
+
+              <!-- TODO for array -->
+              <md-error>This field is required</md-error>
+            </md-input-container>
+            <!-- Boolean -->
+            <md-checkbox
+              *ngIf="schema[k].type == 'boolean'"
+              id="{{k}}"
+              name="{{k}}"
+              [(ngModel)]="sample[k]"
+              [disabled]="!isEditting || !authenticatedSample || !authenticatedSample"
+            >
+              {{schema[k]['placeholder'] || k}}
+            </md-checkbox>
+
+            <!-- Checkbox -->
+            <div
+              class="input-container"
+              *ngIf="schema[k].type == 'array' && (schema[k]['input'] && schema[k]['input'] == 'checkbox')"
+            >
+              <label fxFlex="20" for="">{{schema[k]['placeholder'] || k}}</label>
+              <div fxFlex="80">
+                <md-checkbox
+                  *ngFor="let c of schema[k]['checkboxes'] || []"
+                  [disabled]="!isEditting || !authenticatedSample"
+                >
+                  {{c}}
+                </md-checkbox>
+              </div>
+            </div>
+
+            <md-select
+              *ngIf="schema[k]['input'] && schema[k]['input'] === 'select'"
+              placeholder="{{schema[k]['placeholder'] || k}}"
+              [(ngModel)]="sample[k]"
+              [disabled]="!isEditting || !authenticatedSample"
+              id="{{k}}"
+            >
+              <md-option *ngFor="let c of schema[k]['choices'] || []" [value]="c.key">
+                {{c.value}}
+              </md-option>
+            </md-select>
+
+
+            <!--<br>-->
+          </div>
+
+          <!--TODO: checboxes for types-->
+          <div mdTooltip="{{schema['sp_type']['tooltip'] || 'sp_type'}}">
+            <div class="card-container">
+              <label for="" fxFlex="10" class="checkbox-label">{{schema['sp_type']['placeholder']}}</label>
+              <div fxFlex="90">
+                <md-selection-list #single_sp_type>
+                  <!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>-->
+                  <div class="check-box-div" *ngFor="let c of schema['sp_type']['checkboxes'] || []">
+                    <md-list-option [value]="c" [disabled]="!isEditting || !authenticatedSample">{{c}}</md-list-option>
+                  </div>
+                  <div class="check-box-div">
+
+                    <md-input-container
+                    >
+                      <input mdInput
+                             placeholder="Other"
+                             type="text"
+                             [(ngModel)]="sample['sp_type_other']"
+                             [disabled]="!isEditting || !authenticatedSample || !authenticatedSample"
+                      >
+                    </md-input-container>
+                  </div>
+                </md-selection-list>
+              </div>
+              <div fxFlex="100">
+                <hr>
+              </div>
+            </div>
+          </div>
+
+          <div mdTooltip="{{schema['sp_rocktype']['tooltip'] || 'sp_rocktype'}}">
+            <div class="card-container">
+              <label for="" fxFlex="10" class="checkbox-label">{{schema['sp_rocktype']['placeholder']}}</label>
+              <div fxFlex="90">
+                <md-selection-list #single_sp_rocktype>
+                  <!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>-->
+                  <!--<md-list-option *ngFor="let c of schema['sp_rocktype']['checkboxes'] || []" [value]="c">{{c}}</md-list-option>-->
+                  <div class="rock-title">List of Igneous Rocks</div>
+                  <div class="check-box-div" *ngFor="let c of schema['sp_rocktype']['checkboxes'][0] || []">
+                    <md-list-option [value]="c" [disabled]="!isEditting || !authenticatedSample">{{c}}</md-list-option>
+                  </div>
+                  <div class="rock-title">List of Metamorphic Rocks</div>
+                  <div class="check-box-div" *ngFor="let c of schema['sp_rocktype']['checkboxes'][1] || []">
+                    <md-list-option [value]="c" [disabled]="!isEditting || !authenticatedSample">{{c}}</md-list-option>
+                  </div>
+                  <div class="rock-title">List of Sedimentary Rocks</div>
+                  <div class="check-box-div" *ngFor="let c of schema['sp_rocktype']['checkboxes'][2] || []">
+                    <md-list-option [value]="c" [disabled]="!isEditting || !authenticatedSample">{{c}}</md-list-option>
+                  </div>
+                  <div class="check-box-div">
+
+                    <md-input-container
+                    >
+                      <input mdInput
+                             placeholder="Other"
+                             type="text"
+                             [(ngModel)]="sample['sp_rocktype_other']"
+                             [disabled]="!isEditting || !authenticatedSample || !authenticatedSample"
+                      >
+                    </md-input-container>
+                  </div>
+                </md-selection-list>
+              </div>
+              <div fxFlex="100">
+                <hr>
+              </div>
+            </div>
+          </div>
+
+          <div mdTooltip="{{schema['sp_rockcomp']['tooltip'] || 'sp_rockcomp'}}">
+            <div class="card-container">
+              <label for="" fxFlex="10" class="checkbox-label">{{schema['sp_rockcomp']['placeholder']}}</label>
+              <div fxFlex="90">
+                <md-selection-list #single_sp_rockcomp>
+                  <!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>-->
+                  <!--<md-list-option *ngFor="let c of schema['sp_rockcomp']['checkboxes'] || []" [value]="c">{{c}}</md-list-option>-->
+                  <div class="rock-title">Effusive Deposits</div>
+                  <div class="check-box-div" *ngFor="let c of schema['sp_rockcomp']['checkboxes'][0] || []">
+                    <md-list-option [value]="c" [disabled]="!isEditting || !authenticatedSample">{{c}}</md-list-option>
+                  </div>
+                  <div class="rock-title">Explosive Eruptions</div>
+                  <div class="check-box-div" *ngFor="let c of schema['sp_rockcomp']['checkboxes'][1] || []">
+                    <md-list-option [value]="c" [disabled]="!isEditting || !authenticatedSample">{{c}}</md-list-option>
+                  </div>
+                  <div class="rock-title">Lahar</div>
+                  <div class="check-box-div" *ngFor="let c of schema['sp_rockcomp']['checkboxes'][2] || []">
+                    <md-list-option [value]="c" [disabled]="!isEditting || !authenticatedSample">{{c}}</md-list-option>
+                  </div>
+                  <div class="check-box-div">
+                    <md-input-container
+                    >
+                      <input mdInput
+                             placeholder="Other"
+                             type="text"
+                             [(ngModel)]="sample['sp_rockcomp_other']"
+                             [disabled]="!isEditting || !authenticatedSample || !authenticatedSample"
+                      >
+                    </md-input-container>
+                  </div>
+                </md-selection-list>
+              </div>
+              <div fxFlex="100">
+                <hr>
+              </div>
+            </div>
+          </div>
+          <br>
+        </div>
+      </md-card-content>
+
+      <md-card-actions>
+        <md-slide-toggle
+          *ngIf="authenticatedSample"
+          class="example-margin"
+          [color]="'primary'"
+          [checked]="isEditting"
+          (change)="isEditting = !isEditting"
+        >
+          EDIT
+        </md-slide-toggle>
+        <button md-raised-button *ngIf="isEditting && authenticatedSample" (click)="infoSave()">Save</button>
+        <!--<button md-button>SHARE</button>-->
+      </md-card-actions>
+      <!--<md-card-footer>-->
+      <!--<md-progress-bar mode="indeterminate"></md-progress-bar>-->
+      <!--</md-card-footer>-->
+    </md-card>
+  </div>
+  <div fxFlex="100">
+    <md-card>
+      <md-card-title>Workspaces</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <app-workspaces [authenticated]="authenticatedSample" [workspaces]="sample.workspaces"
+                        [sample]="sample"></app-workspaces>
+      </md-card-content>
+
+      <!--<md-card-actions>-->
+      <!--<button md-button>LIKE</button>-->
+      <!--<button md-button>SHARE</button>-->
+      <!--</md-card-actions>-->
+      <!--<md-card-footer>-->
+      <!--<md-progress-bar mode="indeterminate"></md-progress-bar>-->
+      <!--</md-card-footer>-->
+    </md-card>
+  </div>
+
+  <!--<div fxFlex="100">-->
+  <!--<md-card>-->
+  <!--<md-card-title>Test</md-card-title>-->
+  <!--&lt;!&ndash;<md-card-subtitle>Subtitle</md-card-subtitle>&ndash;&gt;-->
+  <!--<md-card-content>-->
+  <!--<div style="z-index: 40">-->
+  <!--&lt;!&ndash;<img src="{{img.img_url}}" id="test-img-{{img._id}}" *ngFor="let img of sample.img" style="display: none">&ndash;&gt;-->
+  <!--&lt;!&ndash;<img src="{{img.img_url}}" id="img-placeholder-{{img._id}}" *ngFor="let img of sample.img" style="display: none">&ndash;&gt;-->
+  <!--&lt;!&ndash;<img src="{{sample.workspaces[0].images[0].image}}" id="makelink-from-image"  style="display: none">&ndash;&gt;-->
+  <!--&lt;!&ndash;<img src="{{sample.workspaces[0].images[2].image}}" id="makelink-to-image"  style="display: none">&ndash;&gt;-->
+  <!--&lt;!&ndash;<img src="{{img.img_url}}" id="imgimg-placeholder-{{img._id}}" *ngFor="let img of sample.img" style="display: none">&ndash;&gt;-->
+  <!--&lt;!&ndash;<img src="{{img.img_url}}" id="test-img-{{img._id}}" *ngFor="let img of sample.img" >&ndash;&gt;-->
+  <!--</div>-->
+  <!--<hr>-->
+  <!--<div (scroll)="testScroll($event)">-->
+  <!--<canvas style="height: 500px; width: 100%" id="test-canvas"></canvas>-->
+  <!--</div>-->
+
+  <!--</md-card-content>-->
+
+  <!--&lt;!&ndash;<md-card-actions>&ndash;&gt;-->
+  <!--&lt;!&ndash;<button md-button>LIKE</button>&ndash;&gt;-->
+  <!--&lt;!&ndash;<button md-button>SHARE</button>&ndash;&gt;-->
+  <!--&lt;!&ndash;</md-card-actions>&ndash;&gt;-->
+  <!--&lt;!&ndash;<md-card-footer>&ndash;&gt;-->
+  <!--&lt;!&ndash;<md-progress-bar mode="indeterminate"></md-progress-bar>&ndash;&gt;-->
+  <!--&lt;!&ndash;</md-card-footer>&ndash;&gt;-->
+  <!--</md-card>-->
+  <!--</div>-->
+  <div fxFlex="60">
+    <md-card>
+      <md-card-title>Images</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <!--<p>Grid of images </p>-->
+        <!--<a [routerLink]="['/access/imagealy/askjdlajdsad']">TEst iamges</a>-->
+        <app-sample-image-list [authenticated]="authenticatedSample" [imgList]="sample.img"></app-sample-image-list>
+        <!--<md-grid-list cols="3" rowHeight="200px">-->
+        <!--<md-grid-tile *ngFor="let img of sam">-->
+        <!--<img [alt]="img.img_name" src="{{img.img_url}}" (click)="selectImage(img)" [ngClass]="{'selected-image': selectedImage === img}">-->
+        <!--<img [alt]="img.img_name" src="{{img.img_url}}" (click)="selectImage(img)" [ngClass]="{'selected-image': selectedImage === img}">-->
+        <!--<md-grid-tile-footer>-->
+        <!--<h3 md-line>{{img.img_name}}</h3>-->
+        <!--<span md-line>Category: {{img.img_cat}}</span>-->
+        <!--<md-icon>star_border</md-icon>-->
+        <!--</md-grid-tile-footer>-->
+        <!--</md-grid-tile>-->
+        <!--</md-grid-list>-->
+
+        <app-new-image *ngIf="authenticatedSample" [sample]="sample" ></app-new-image>
+
+      </md-card-content>
+
+    </md-card>
+  </div>
+
+  <div fxFlex="40">
+    <md-card>
+      <md-card-title>Files</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content *ngIf="authenticatedSample">
+        <app-sample-file-list [fileList]="sample.linkf_list" [sample]="sample"></app-sample-file-list>
+      </md-card-content>
+    </md-card>
+  </div>
+
+
+  <div fxFlex="100">
+    <md-card>
+      <md-card-title>References</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content *ngIf="authenticatedSample">
+        <!--<app-sample-file-list [fileList]="sample.linkf_list" [sample]="sample"></app-sample-file-list>-->
+        <app-publication-list  [sample]="sample"></app-publication-list>
+      </md-card-content>
+    </md-card>
+  </div>
+
+  <button *ngIf="!notNullSample" md-button color="warn" (click)="deleteSample(sample)">Delete this Sample ( on developing - only delete if sample is null )</button>
+</div>

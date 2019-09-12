@@ -1,0 +1,92 @@
+<!--<div class="example-container mat-elevation-z8" [ngStyle]="{'max-width': _width + 'px'}">-->
+<div class="example-container mat-elevation-z8" [ngStyle]="{'width': '100%'}">
+  <div class="example-header">
+    <md-form-field floatPlaceholder="never">
+      <input mdInput #vol_filter placeholder="Search volcano name">
+    </md-form-field>
+  </div>
+
+  <md-table mdSort #table [dataSource]="dataSource" [ngStyle]="{'max-height': _height + 'px'}">
+
+    <!--- Note that these columns can be defined in any order.
+			  The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- ID Column -->
+    <!--<ng-container mdColumnDef="">-->
+    <!--<md-header-cell *mdHeaderCellDef> ID </md-header-cell>-->
+    <!--<md-cell *mdCellDef="let row"> {{row.id}} </md-cell>-->
+    <!--</ng-container>-->
+
+    <!-- Progress Column -->
+    <!--<ng-container mdColumnDef="select">-->
+    <!--<md-header-cell *mdHeaderCellDef> Select</md-header-cell>-->
+    <!--<md-cell *mdCellDef="let row">-->
+    <!--<md-checkbox-->
+    <!--[(ngModel)]="selected[row.$key]">-->
+    <!--&lt;!&ndash;[disabled]="disabled">&ndash;&gt;-->
+    <!--</md-checkbox>-->
+    <!--</md-cell>-->
+    <!--</ng-container>-->
+
+    <ng-container mdColumnDef="vd_name">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Name</md-header-cell>
+      <md-cell *mdCellDef="let row">
+        <a md-raised-button target="_blank" class="link-button" [routerLink]="['/access/volcano/' + row.$key]">
+          <span class="link-label">{{row.vd_name}}</span>
+        </a>
+      </md-cell>
+    </ng-container>
+    <!--<ng-container mdColumnDef="vd_cavw" >-->
+    <!--<md-header-cell *mdHeaderCellDef md-sort-header> CAVW</md-header-cell>-->
+    <!--<md-cell *mdCellDef="let row"> {{row.vd_cavw}}</md-cell>-->
+    <!--</ng-container>-->
+
+    <!--<ng-container mdColumnDef="vd_num">-->
+      <!--<md-header-cell *mdHeaderCellDef md-sort-header> CAVW</md-header-cell>-->
+      <!--<md-cell *mdCellDef="let row"> {{row.vd_num}}</md-cell>-->
+    <!--</ng-container>-->
+
+    <ng-container mdColumnDef="projs" >
+      <md-header-cell *mdHeaderCellDef md-sort-header> Projects</md-header-cell>
+      <md-cell *mdCellDef="let row">
+        <button md-raised-button *ngIf="!row.vd_projs" (click)="loadSamples(row)" >Load</button>
+        <div>
+          <md-radio-group *ngIf="!!row.vd_projs" class="example-radio-group" [(ngModel)]="row.vd_selected_proj">
+            <md-radio-button class="example-radio-button" *ngFor="let proj of row.vd_projs; let i = index"
+                              [attr.data-index]="i" [value]="i">
+              <a md-raised-button target="_blank"
+                 class="link-button" [routerLink]="['/access/project/' + proj.$key]">
+                <span class="link-label">{{proj.proj_name}}</span>
+              </a>
+            </md-radio-button>
+          </md-radio-group>
+        </div>
+
+      </md-cell>
+    </ng-container>
+    <ng-container mdColumnDef="samples">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Samples</md-header-cell>
+      <md-cell *mdCellDef="let row">
+        <!--<button md-raised-button [disabled]="!row.vd_projs">Load</button>-->
+        <div *ngIf="row.vd_selected_proj > -1">
+          <a md-raised-button target="_blank" *ngFor="let sp of row.vd_projs[row.vd_selected_proj].proj_sp_ids"
+             class="link-button" [routerLink]="['/access/sample/' + sp.$key]">
+            <span class="link-label">{{sp.sp_name}}({{sp.sp_uploader.displayName ? sp.sp_uploader.displayName : sp.sp_uploader.us_family}})</span>
+          </a>
+        </div>
+      </md-cell>
+    </ng-container>
+
+
+    <!--<ng-container mdColumnDef="ref_name">-->
+    <!--<md-header-cell *mdHeaderCellDef> Name</md-header-cell>-->
+    <!--<md-cell *mdCellDef="let row"> {{row.ref_name}}</md-cell>-->
+    <!--</ng-container>-->
+
+    <!-- Name Column -->
+
+
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+  </md-table>
+</div>

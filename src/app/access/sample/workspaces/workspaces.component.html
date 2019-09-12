@@ -1,0 +1,16 @@
+<md-card>
+	<md-card-content>
+		<button md-raised-button (click)="onNewWorkspace()" [disabled]="!authenticated">New workspace</button>
+	</md-card-content>
+</md-card>
+
+<md-tab-group class="tab-group" dynamicHeight (selectChange)="tabSelectChange($event)" [(selectedIndex)]="selectedIndex">
+	<md-tab *ngFor="let ws of workspaces; let i = index">
+		<ng-template md-tab-label>{{ws.ws_name}}</ng-template>
+		<div class="tab-content">
+			<!--<form [formGroup]="myForm" (ngSubmit)="onSubmit()">-->
+			<app-workspace [authenticated]="authenticated" [setWorkspace]="ws" [index]="i" [tabIndex]="selectedIndex" [workspaces]="workspaces" [sample]="sample" (onDuplicate)="onDuplicate($event)"></app-workspace>
+		</div>
+	</md-tab>
+
+</md-tab-group>

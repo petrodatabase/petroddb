@@ -1,0 +1,59 @@
+<div class="point-aly-chart">
+	<div class="chart-wrapper" *ngIf="!!config"
+  >
+  <!--[ngStyle]="{'width': _width + 'px', 'height': _height + 'px'}"-->
+		<!-- line and bar chart-->
+		<div *ngIf="['line', 'bar', 'radar'].indexOf(config.type) > -1"
+    >
+      <!--[ngStyle]="{'width': _width + 'px', 'height': _height + 'px'}"-->
+
+      <!--[height]="_height"-->
+      <!--[width]="_width"-->
+      <!--[ngStyle]="{'width': _width + 'px', 'height': _height + 'px'}"-->
+      <canvas baseChart
+              height="450"
+					[datasets]="config.data"
+					[labels]="config.labels"
+					[options]="config.options"
+					[legend]="config.legend"
+					[chartType]="config.type"
+					(chartHover)="config.click($event)"
+					(chartClick)="config.hover($event)"></canvas>
+		</div>
+		<div *ngIf="['pie', 'doughnut', 'polarArea'].indexOf(config.type) > -1">
+				<!--<canvas baseChart-->
+			<div class="card-container">
+				<div fxFlex="50" *ngFor="let v of config.data; let i = index" [attr.data-index]="i">
+					<!--<canvas baseChart *ngFor="let v of config.data; let i = index" [attr.data-index]="i"-->
+                  <!--width="_height"-->
+                            <!--height="450"-->
+          <canvas baseChart
+                  [data]="config.data[i]"
+                  [labels]="config.labels[i]"
+								[options]="config.otherParams[i]"
+								[legend]="config.legend"
+								[chartType]="config.type"
+								(chartHover)="config.click($event)"
+								(chartClick)="config.hover($event)"></canvas>
+
+				</div>
+			</div>
+			<!--</div>-->
+		</div>
+		<div *ngIf="['ternary'].indexOf(config.type) > -1" class="ternary-chart">
+			<div id="ternary-chart" #ternaryChart>
+			</div>
+		</div>
+
+    <div *ngIf="['scatter'].indexOf(config.type) > -1"
+    >
+      <!--[ngStyle]="{'width': _width + 'px', 'height': _height + 'px'}"-->
+
+      <!--[height]="_height"-->
+      <!--[width]="_width"-->
+      <!--[ngStyle]="{'width': _width + 'px', 'height': _height + 'px'}"-->
+
+      <google-chart [data]="scatterChartData"></google-chart>
+
+	</div>
+</div>

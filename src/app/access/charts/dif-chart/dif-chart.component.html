@@ -1,0 +1,12 @@
+<div class="dif-chart">
+	<canvas baseChart
+			height="450"
+			[datasets]="chartConfig.data"
+			[labels]="chartConfig.labels"
+			[options]="chartConfig.options"
+        [legend]="chartConfig.legend"
+        [chartType]="chartConfig.type"
+        (chartHover)="chartConfig.click($event)"
+        (chartClick)="chartConfig.hover($event)"></canvas>
+		<!--*ngIf="chartConfig.data.length > 0"-->
+</div>

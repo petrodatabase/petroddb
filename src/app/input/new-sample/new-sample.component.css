@@ -1,0 +1,76 @@
+md-input-container {
+	width: 100%;
+}
+
+.mat-form-field {
+	width: 100%;
+}
+
+md-checkbox {
+	margin: 0 10px;
+}
+
+.input-field {
+	display: inline-block;
+	width: 49%;
+}
+
+.checkbox-list {
+	width: 100%;
+}
+
+.check-box-div {
+	width: 25%;
+	display: inline-block;
+}
+
+md-progress-bar {
+	width: 10%;
+}
+
+.card-container {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+md-selection-list {
+	display: inline;
+	width: auto;
+}
+
+md-list-option {
+	display: inline;
+	width: auto;
+}
+
+md-list-option div {
+	display: inline;
+}
+
+.checkbox-label {
+	margin-top: 15px;
+}
+
+.mat-selection-list .mat-list-option {
+	display: inline;
+}
+.mat-list-item-content .mat-list-item-content-reverse {
+	display: inline;
+}
+
+.mat-selection-list .mat-list-option .mat-list-item-content-reverse {
+	display: inline;
+}
+
+.mat-selection-list .mat-list-option .mat-list-text {
+	display: inline;
+
+}
+
+.mat-list .mat-list-option .mat-list-text, .mat-nav-list .mat-list-option .mat-list-text, .mat-selection-list .mat-list-option .mat-list-text {
+	display: inline !important;
+}
+
+.rock-title {
+  margin-top: 15px;
+  margin-bottom:  5px;
+}

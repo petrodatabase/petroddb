@@ -1,0 +1,30 @@
+<h2 md-dialog-title>Image to image</h2>
+
+<md-dialog-content>
+
+  <md-card>
+    <md-card-content>
+      <img src="{{fromImgRel.image}}" alt="no content from source" style="display: none;" id="{{fromImgId}}">
+      <img src="{{toImgRel.image}}" alt="no content from target" style="display: none;" id="{{toImgId}}">
+      <div class="canvas-wrapper"
+           [ngStyle]="{'height': getCanvasHeight() + 'px', 'width': getCanvasWidth() + 'px'}"
+           (scroll)="updateContainerScroll($event)">
+        <canvas id="makelink-canvas"></canvas>
+      </div>
+    </md-card-content>
+  </md-card>
+
+</md-dialog-content>
+
+<md-dialog-actions >
+  <!--<md-dialog-actions [attr.align]="actionsAlignment">-->
+  <button
+    md-raised-button
+    color="primary"
+    md-dialog-close
+    (click)="onCloseCancel()"
+  >Close
+  </button>
+
+
+</md-dialog-actions>

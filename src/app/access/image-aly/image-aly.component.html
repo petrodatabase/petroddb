@@ -1,0 +1,373 @@
+
+
+<div class="card-container" *ngIf="!!image && !!permission && permission!= modelPermission.INVISIBLE">
+
+  <div fxFlex="100">
+    <md-card>
+      <!--<md-card-title>Display</md-card-title>-->
+      <md-card-content>
+        <!--<img src="/assets/img/volcanoes-masthead.png" alt="Volcano">-->
+        <a md-button [routerLink]="['/access/display']">
+          Display
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <a md-button [routerLink]="['/access/volcano/' + sample?.vd.$key]">
+          {{sample?.vd.vd_name}}
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <a md-button [routerLink]="['/access/project/' + sample?.proj.$key]">
+          {{sample?.proj.proj_name}}
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <a md-button [routerLink]="['/access/sample/' + sample?.$key]">
+          {{sample?.sp_name}}
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <a md-button [disabled]="true">
+          {{image?.img_name}}
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+
+        <!--<button md-button (click)="testOpenPointAlyChart()">Test</button>-->
+
+        <!-- FIXME: baseon router >>>> next and next -->
+      </md-card-content>
+    </md-card>
+  </div>
+
+  <div fxFlex="100" *ngIf="!!image">
+    <!--FIXME: separate component-->
+
+    <md-card
+    >
+      <md-card-title>Image: {{image.img_name}}</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <app-image-panel-canvas
+          [authenticated]="authenticated"
+          [setImage]="image" [sample]="sample"
+          (onPointAlyCreated)="onPointAlyCreated($event)"
+          (onPointAlyEditted)="onPointAlyEditted($event)"
+          (onPointAlyDeleted)="onPointAlyDeleted($event)"
+          (onDifCreated)="onDifCreated($event)"
+          (onDifEditted)="onDifEditted($event)"
+          (onDifDeleted)="onDifDeleted($event)"
+          (onImageLoadedEvent)="onImageLoaded()"
+        ></app-image-panel-canvas>
+      </md-card-content>
+
+      <!--<md-card-actions>-->
+      <!--<button md-button>LIKE</button>-->
+      <!--<button md-button>SHARE</button>-->
+      <!--</md-card-actions>-->
+      <!--<md-card-footer>-->
+      <!--<md-progress-bar mode="indeterminate"></md-progress-bar>-->
+      <!--</md-card-footer>-->
+    </md-card>
+  </div>
+
+
+  <div fxFlex="40">
+    <md-card>
+      <md-card-title>Image Details</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <div class="img-info">
+          <md-input-container>
+            <input type="text" mdInput
+                   [disabled]="!isInfoEdit"
+                   [(ngModel)]="image.img_name" required placeholder="Image Name">
+            <md-error>This field is required</md-error>
+          </md-input-container>
+          <md-input-container>
+            <input type="text" mdInput
+                   [disabled]="!isInfoEdit"
+                   [(ngModel)]="image.img_des" required placeholder="Description">
+            <md-error>This field is required</md-error>
+          </md-input-container>
+
+          <md-select [disabled]="!isInfoEdit" placeholder="Category" [(ngModel)]="image.img_cat">
+            <md-option *ngFor="let c of imageSchema.img_cat.choices || []" [value]="c">
+              {{c}}
+            </md-option>
+          </md-select>
+
+          <md-select [disabled]="!isInfoEdit" placeholder="Instrument" [(ngModel)]="image.img_instr">
+            <md-option *ngFor="let c of imageSchema.img_instr.choices || []" [value]="c">
+              {{c}}
+            </md-option>
+          </md-select>
+
+          <md-input-container>
+            <input type="number" mdInput
+                   [disabled]="!isInfoEdit"
+                   [(ngModel)]="image.cm_stage_x" required placeholder="CM stage X">
+            <md-error>This field is required</md-error>
+          </md-input-container>
+
+          <md-input-container>
+            <input type="number" mdInput
+                   [disabled]="!isInfoEdit"
+                   [(ngModel)]="image.cm_stage_y" required placeholder="CM stage Y">
+            <md-error>This field is required</md-error>
+          </md-input-container>
+
+          <md-input-container>
+            <input type="number" mdInput
+                   [disabled]="!isInfoEdit"
+                   [(ngModel)]="image.cm_fullsize_w" required placeholder="Fullsize width">
+            <md-error>This field is required</md-error>
+          </md-input-container>
+
+          <md-input-container>
+            <input type="number" mdInput
+                   [disabled]="!isInfoEdit"
+                   [(ngModel)]="image.cm_fullsize_h" required placeholder="Fullsize height">
+            <md-error>This field is required</md-error>
+          </md-input-container>
+
+          <md-input-container>
+            <input type="number" mdInput
+                   [disabled]="!isInfoEdit"
+                   [(ngModel)]="image.sm_micron_bar" required placeholder="SM micron bar">
+            <md-error>This field is required</md-error>
+          </md-input-container>
+          <md-input-container>
+            <input type="number" mdInput
+                   [disabled]="!isInfoEdit"
+                   [(ngModel)]="image.sm_micron_marker" required placeholder="SM micron marker">
+            <md-error>This field is required</md-error>
+          </md-input-container>
+
+
+        </div>
+      </md-card-content>
+
+      <md-card-actions>
+        <md-slide-toggle [checked]="isInfoEdit" (change)="isInfoEdit = !isInfoEdit">Edit</md-slide-toggle>
+        <button md-raised-button *ngIf="isInfoEdit" (click)="onInfoEditConfirm()">Confirm</button>
+        <!--<button md-button>SHARE</button>-->
+      </md-card-actions>
+      <md-card-footer>
+        <md-progress-bar *ngIf="infoLoading" mode="indeterminate"></md-progress-bar>
+      </md-card-footer>
+    </md-card>
+  </div>
+  <div fxFlex="60" *ngIf="!!sample">
+    <md-card>
+      <md-card-title>Other Images</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <app-sample-image-list [imgList]="sample.img"></app-sample-image-list>
+      </md-card-content>
+
+    </md-card>
+  </div>
+
+  <div fxFlex="100" *ngIf="!!image">
+    <md-card>
+      <md-card-title>Points analysis</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <app-aly-table [alys]="image.point_alys"></app-aly-table>
+
+        <hr>
+
+        <!--<md-card>-->
+        <!--<md-card-content>-->
+        <md-expansion-panel>
+          <md-expansion-panel-header>
+            <md-panel-title>
+              Charts
+            </md-panel-title>
+            <md-panel-description>
+              Click to expand chart panel
+            </md-panel-description>
+          </md-expansion-panel-header>
+
+
+          <md-card-title>Plot Chart</md-card-title>
+          <div class="card-container">
+            <div fxFlex="100">
+              <md-input-container>
+                <input type="text" mdInput placeholder="Chart Name" id="chart_name" name="chart_name"
+                       [(ngModel)]="newChart.chart_name" required>
+                <md-error>This field is required</md-error>
+              </md-input-container>
+              <md-input-container>
+                <input type="text" mdInput placeholder="Comment" id="comment" name="comment"
+                       [(ngModel)]="newChart.comment">
+              </md-input-container>
+              <md-select placeholder="Type" [(ngModel)]="newChart.type" id="type" name="type" >
+                <md-option [value]="'line'">Line</md-option>
+                <md-option [value]="'bar'">Bar</md-option>
+                <md-option [value]="'pie'">Pie</md-option>
+                <md-option [value]="'doughnut'">Doughnut</md-option>
+                <md-option [value]="'polarArea'">PolarArea</md-option>
+                <md-option [value]="'ternary'">Ternary</md-option>
+                <md-option [value]="'scatter'">Scatter</md-option>
+              </md-select>
+            </div>
+
+            <div fxFlex="100">
+              <div class="dim-choice" *ngIf="newChart.type !=''">
+                <md-select placeholder="X axis" [(ngModel)]="newChartConfig.x_axis" (change)="onNewChartXChange()" [hidden]="newChart.type != 'line' && newChart.type!= 'scatter'">
+                  <md-option [value]="''"></md-option>
+                  <md-option *ngFor="let c of newChartConfig.allAccessDims; let i = index" [attr.data-index]="i"
+                             [value]="c">{{newChartConfig.allDims[i]}}
+                  </md-option>
+                </md-select>
+                <div [hidden]="newChart.type != 'scatter'">
+                  <md-input-container [hidden]="newChartConfig.x_axis != 'data.143Nd_144Nd' && newChartConfig.x_axis != 'data.176Hf_177Hf' ">
+                    <input type="text" mdInput
+                           [(ngModel)]="r_for_x_axis" placeholder="R standard for x_axis">
+                  </md-input-container>
+                </div>
+                <div>
+                  <div fxFlex="6" class="other-choices other-choices-label">
+                    <label for="">Y axis:</label>
+                  </div>
+                  <div fxFlex="94" class="other-choices">
+                    <div class="choice"
+                         *ngFor="let c of newChartConfig.allAccessDims; let i = index" [attr.data-index]="i">
+                      <md-checkbox
+                        *ngIf="c != newChartConfig.x_axis"
+                        [(ngModel)]="newChartConfig.selectiveDims[c]">
+                        {{newChartConfig.allDims[i]}}
+                      </md-checkbox>
+                    </div>
+                    <div [hidden]="newChart.type != 'scatter'">
+                      <md-input-container [hidden]="newChartConfig.selectiveDims['data.143Nd_144Nd'] != true  && newChartConfig.selectiveDims['data.176Hf_177Hf'] != true">
+                        <input type="text" mdInput
+                               [(ngModel)]="r_for_y_axis" placeholder="R standard for y_axis">
+                      </md-input-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div fxFlex="100" *ngIf="!!pointAlyChartConfig">
+
+              <!--[width]="width" [height]="height"-->
+              <app-point-aly-chart
+                *ngIf="pointAlyChartConfig"
+                [pointAlys]="pointAlyChartConfig.data.pointAlys"
+                [chart]="pointAlyChartConfig.data.chart"
+                [R]="[r_for_x_axis,r_for_y_axis]"
+              ></app-point-aly-chart>
+            </div>
+
+          </div>
+
+          <button md-button [disabled]="!!pointAlyChartConfig" (click)="openNewChart()">Open</button>
+          <button md-button [disabled]="!pointAlyChartConfig" (click)="resetChart()">Reset</button>
+          <button md-button [disabled]="!pointAlyChartConfig" (click)="saveChart()">Save</button>
+
+          <!--<md-form-field>-->
+          <!--<input mdInput placeholder="First name">-->
+          <!--</md-form-field>-->
+
+          <!--<md-form-field>-->
+          <!--<input mdInput placeholder="Age">-->
+          <!--</md-form-field>-->
+        </md-expansion-panel>
+
+
+        <!--</md-card-content>-->
+        <!--<md-card-actions>-->
+        <!--<button md-button (click)="openNewChart()">Open</button>-->
+        <!--&lt;!&ndash;<button md-raised-button>SAVE</button>&ndash;&gt;-->
+        <!--</md-card-actions>-->
+        <!--</md-card>-->
+      </md-card-content>
+
+    </md-card>
+  </div>
+
+  <div fxFlex="100" *ngIf="!!image">
+    <md-card>
+      <md-card-title>Point Analysis Charts</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <md-tab-group class="tab-group" dynamicHeight
+        >
+          <md-tab *ngFor="let chart of image.charts">
+            <ng-template md-tab-label>{{chart.chart_name}}</ng-template>
+            <div class="tab-content point-aly-chart-div">
+              <button md-raised-button color="warn" (click)="deleteChart(chart)">Delete</button>
+              <app-point-aly-chart
+                                   [pointAlys]="image.point_alys"
+                                   [chart]="chart"
+                                   [R]="[chart.r_x_axis,chart.r_y_axis]"
+              ></app-point-aly-chart>
+            </div>
+          </md-tab>
+        </md-tab-group>
+      </md-card-content>
+
+    </md-card>
+  </div>
+
+  <div fxFlex="100" *ngIf="!!image">
+    <md-card>
+      <md-card-title>Traverse</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <!--<app-dif-table [difs]="image.diffusions"></app-dif-table>-->
+        <md-tab-group class="tab-group" dynamicHeight
+        >
+          <!--[(selectedIndex)]="pointAlyTabIndex"-->
+          <!--(selectChange)="onPointAlyTabIndexChange()"-->
+          <md-tab *ngFor="let dif of image.diffusions">
+            <ng-template md-tab-label>{{dif.dif_name}}</ng-template>
+            <div class="tab-content">
+              <!--<app-dif-chart [diffusion]="dif"></app-dif-chart>-->
+              <app-image-aly-dif [diffusion]="dif" (difUpdate)="difInfoUpdate($event, index)"></app-image-aly-dif>
+            </div>
+          </md-tab>
+        </md-tab-group>
+      </md-card-content>
+
+    </md-card>
+  </div>
+  <!--FIXME: plagioclase will be regional and dialog open to change graph!-->
+  <!--<div fxFlex="100" *ngIf="!!image">-->
+  <!--<md-card>-->
+  <!--<md-card-title>Plagioclase</md-card-title>-->
+  <!--&lt;!&ndash;<md-card-subtitle>Subtitle</md-card-subtitle>&ndash;&gt;-->
+  <!--<md-card-content>-->
+  <!--<div>-->
+  <!--Grey Scale *-->
+  <!--<md-input-container>-->
+  <!--<input type="number" mdInput [(ngModel)]="plagioclaseLinearParams.a" (change)="plagioclaseLinearParams.a = +plagioclaseLinearParams.a" placeholder="Coefficient">-->
+  <!--</md-input-container>-->
+  <!--+-->
+  <!--<md-input-container>-->
+  <!--<input type="number" mdInput [(ngModel)]="plagioclaseLinearParams.b" (change)="plagioclaseLinearParams.b = +plagioclaseLinearParams.b"  placeholder="Bias">-->
+  <!--</md-input-container>-->
+  <!--= Annotation-->
+
+  <!--<button md-raised-button (click)="plotPlagioclase()">Re-plot Plagioclase</button>-->
+  <!--</div>-->
+  <!--<div>-->
+  <!--<canvas baseChart *ngIf="plagioclaseChart.data.length > 0"-->
+  <!--height="450"-->
+  <!--[datasets]="plagioclaseChart.data"-->
+  <!--[labels]="plagioclaseChart.labels"-->
+  <!--[options]="plagioclaseChart.options"-->
+  <!--[legend]="plagioclaseChart.legend"-->
+  <!--[chartType]="plagioclaseChart.type"-->
+  <!--(chartHover)="plagioclaseChart.hover($event)"-->
+  <!--(chartClick)="plagioclaseChart.click($event)"></canvas>-->
+
+
+  <!--</div>-->
+  <!--</md-card-content>-->
+
+  <!--</md-card>-->
+  <!--</div>-->
+
+
+</div>

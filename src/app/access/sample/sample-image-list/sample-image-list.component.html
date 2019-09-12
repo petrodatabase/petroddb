@@ -1,0 +1,20 @@
+<div class="image-list-wrapper">
+
+<md-grid-list cols="3" rowHeight="200px">
+
+	<md-grid-tile *ngFor="let img of imgList">
+    <img [alt]="img.img_name"
+         src="{{globals.uploadHost}}/{{img.sp_id}}/{{img.$key}}/{{img.stored_file_name}}"
+    >
+		<md-grid-tile-footer>
+			<h3 md-line><a [routerLink]="['/access/imagealy/' + img.$key ]" >{{img.img_name}}</a></h3>
+			<span md-line>Category: {{img.img_cat}}</span>
+			<button md-button color="accent" (click)="openImage(img)">Open</button>
+      <!--<button md-button color="accent" (click)="deleteThisImage(img)">Delete</button>-->
+		</md-grid-tile-footer>
+	</md-grid-tile>
+
+</md-grid-list>
+
+</div>
+

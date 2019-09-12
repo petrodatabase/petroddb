@@ -1,0 +1,76 @@
+/* Structure */
+.example-container {
+	display: flex;
+	flex-direction: column;
+	/*min-width: 300px;*/
+}
+
+.example-header {
+	min-height: 64px;
+	/*display: flex;*/
+	display: block;
+	align-items: center;
+	padding-left: 24px;
+	font-size: 20px;
+}
+
+.example-header {
+	min-height: 64px;
+	display: block;
+	align-items: baseline;
+	padding: 8px 24px 0;
+	font-size: 20px;
+	justify-content: space-between;
+}
+
+.mat-form-field {
+	font-size: 14px;
+	flex-grow: 1;
+	margin-left: 32px;
+}
+
+.mat-table {
+	overflow: auto;
+	/*max-height: 500px;*/
+}
+
+md-input-container {
+	width: auto;
+}
+
+.example-section {
+	/*display: flex;*/
+	/*align-content: center;*/
+	/*align-items: center;*/
+	max-height: 100px;
+}
+
+.field-option {
+	/*max-height: 65px;*/
+	overflow-y: auto;
+	font-size: small;
+}
+
+.example-section md-form-field {
+	width: 70%
+}
+
+.example-margin {
+	margin: 0 10px;
+	width: 14%;
+	display: inline-block;
+}
+.example-label {
+	margin: auto;
+}
+
+.field-label {
+	margin: auto;
+}
+
+md-header-row {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index:9999;
+}

@@ -1,0 +1,54 @@
+<h2 md-dialog-title>Report and Feedback</h2>
+
+<md-dialog-content>
+
+	<p>Please specify your problem and feed back in the field below</p>
+	<div class="report-content">
+		<md-input-container style="width:100%">
+			<input mdInput
+				   placeholder="{{schema['title']['placeholder'] || 'title'}}"
+				   name="title"
+				   [(ngModel)]="reportData.title"
+				   [disabled]="!authenticated"
+			>
+			<!-- TODO for array -->
+			<md-error>This field is required</md-error>
+		</md-input-container>
+    <br>
+		<md-input-container style="width:100%">
+			<textarea mdInput
+				   placeholder="{{schema['description']['placeholder'] || 'description'}}"
+				   name="description"
+				   [(ngModel)]="reportData.description"
+				   [disabled]="!authenticated" style="height: 150px;"
+      ></textarea>
+			<!-- TODO for array -->
+			<md-error>This field is required</md-error>
+		</md-input-container>
+
+	</div>
+</md-dialog-content>
+
+<!--<md-dialog-actions [attr.align]="actionsAlignment">-->
+<md-dialog-actions>
+	<button
+			md-raised-button
+			color="primary"
+			(click)="onCloseCancel()">Decline
+	</button>
+	<button
+			md-raised-button
+			color="accent"
+			[disabled]="!authenticated || reportData.title == '' || reportData.description == ''"
+			(click)="onCloseConfirm()">
+		{{ (!authenticated) ? 'Permission Denied' :
+		((reportData.title == '' || reportData.description == '') ? 'Please Enter the form' : 'Confirm')}}
+	</button>
+	<md-progress-bar
+			*ngIf="loading"
+			[color]="primary"
+			[mode]="indeterminate"
+	>
+		<!--[bufferValue]="bufferValue">-->
+	</md-progress-bar>
+</md-dialog-actions>

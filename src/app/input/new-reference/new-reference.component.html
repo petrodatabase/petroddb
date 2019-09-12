@@ -1,0 +1,149 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+	<div class="input-field" mdTooltip="{{schema['cb_auth']['tooltip'] || 'cb_auth'}}">
+		<md-input-container>
+			<input type="text"
+				   placeholder="{{schema['cb_auth']['placeholder'] || 'cb_auth'}}"
+				   aria-label="Number"
+				   mdInput
+				   formControlName="cb_auth"
+				   id="cb_auth"
+				   (keyup)="inputChange('cb_auth')"
+				   [mdAutocomplete]="cb_auth_auto"
+			>
+			<md-autocomplete #cb_auth_auto="mdAutocomplete">
+				<md-option *ngFor="let option of autoCompleteFilterData['cb_auth']" [value]="option">
+					{{ option }}
+				</md-option>
+			</md-autocomplete>
+		</md-input-container>
+	</div>
+	<div class="input-field" mdTooltip="{{schema['cb_title']['tooltip'] || 'cb_title'}}">
+		<md-input-container>
+			<input type="text"
+				   placeholder="{{schema['cb_title']['placeholder'] || 'cb_title'}}"
+				   aria-label="Number"
+				   mdInput
+				   formControlName="cb_title"
+				   id="cb_title"
+				   (keyup)="inputChange('cb_title')"
+				   [mdAutocomplete]="cb_title_auto"
+			>
+			<md-autocomplete #cb_title_auto="mdAutocomplete">
+				<md-option *ngFor="let option of autoCompleteFilterData['cb_title']" [value]="option">
+					{{ option }}
+				</md-option>
+			</md-autocomplete>
+		</md-input-container>
+	</div>
+	<div class="input-field" mdTooltip="{{schema['cb_journ']['tooltip'] || 'cb_journ'}}">
+		<md-input-container>
+			<input type="text"
+				   placeholder="{{schema['cb_journ']['placeholder'] || 'cb_journ'}}"
+				   aria-label="Number"
+				   mdInput
+				   formControlName="cb_journ"
+				   id="cb_journ"
+				   (keyup)="inputChange('cb_journ')"
+				   [mdAutocomplete]="cb_journ_auto"
+			>
+			<md-autocomplete #cb_journ_auto="mdAutocomplete">
+				<md-option *ngFor="let option of autoCompleteFilterData['cb_journ']" [value]="option">
+					{{ option }}
+				</md-option>
+			</md-autocomplete>
+		</md-input-container>
+	</div>
+	<div class="input-field" mdTooltip="{{schema['cb_pub']['tooltip'] || 'cb_pub'}}">
+		<md-input-container>
+			<input type="text"
+				   placeholder="{{schema['cb_pub']['placeholder'] || 'cb_pub'}}"
+				   aria-label="Number"
+				   mdInput
+				   formControlName="cb_pub"
+				   id="cb_pub"
+				   (change)="inputChange('cb_pub')"
+				   [mdAutocomplete]="cb_pub_auto"
+			>
+			<md-autocomplete #cb_pub_auto="mdAutocomplete">
+				<md-option *ngFor="let option of autoCompleteFilterData['cb_pub']" [value]="option">
+					{{ option }}
+				</md-option>
+			</md-autocomplete>
+		</md-input-container>
+	</div>
+	<div class="input-field" mdTooltip="{{schema['cb_isbn']['tooltip'] || 'cb_isbn'}}">
+		<md-input-container>
+			<input type="text"
+				   placeholder="{{schema['cb_isbn']['placeholder'] || 'cb_isbn'}}"
+				   aria-label="Number"
+				   mdInput
+				   formControlName="cb_isbn"
+				   id="cb_isbn"
+				   (change)="inputChange('cb_isbn')"
+				   [mdAutocomplete]="cb_isbn_auto"
+			>
+			<md-autocomplete #cb_isbn_auto="mdAutocomplete">
+				<md-option *ngFor="let option of autoCompleteFilterData['cb_isbn']" [value]="option">
+					{{ option }}
+				</md-option>
+			</md-autocomplete>
+		</md-input-container>
+	</div>
+
+	<!--TODO: regular inputs-->
+	<div *ngFor="let k of formIncludeFields"
+         class="input-field"
+         mdTooltip="{{schema[k]['tooltip'] || k}}"
+    >
+        <md-input-container
+                *ngIf="['string', 'number'].indexOf(schema[k].type) > -1 && autoCompleteKeys.indexOf(k) == -1"
+        >
+            <input mdInput
+                   placeholder="{{schema[k]['placeholder'] || k}}"
+                   formControlName="{{k}}"
+                   id="{{k}}"
+                   type="{{schema[k].type === 'string' ? 'text' : (schema[k].type === 'number' ? 'number' : (schema[k].type === 'boolean' ? 'checkbox' : 'text'))}}"
+            >
+            <!-- TODO for array -->
+            <md-error>This field is required</md-error>
+        </md-input-container>
+
+        <!-- Boolean -->
+        <md-checkbox
+                *ngIf="schema[k].type == 'boolean'"
+                formControlName="{{k}}"
+                id="{{k}}"
+        >
+            {{schema[k]['placeholder'] || k}}
+        </md-checkbox>
+
+        <!--&lt;!&ndash; Checkbox &ndash;&gt;-->
+        <!--<div-->
+        <!--class="card-container"-->
+        <!--*ngIf="schema[k].type == 'array' && (schema[k]['input'] && schema[k]['input'] == 'checkbox')"-->
+        <!--&gt;-->
+        <!--<label fxFlex="20" for="">{{schema[k]['placeholder'] || k}}</label>-->
+        <!--<div fxFlex="80">-->
+        <!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []">{{c}}</md-checkbox>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <md-select
+                *ngIf="schema[k]['input'] && schema[k]['input'] === 'select'"
+                placeholder="{{schema[k]['placeholder'] || k}}"
+                formControlName="{{k}}"
+                id="{{k}}"
+        >
+            <md-option *ngFor="let c of schema[k]['choices'] || []" [value]="c.key">
+                {{c.value}}
+            </md-option>
+        </md-select>
+
+
+        <!--<br>-->
+    </div>
+
+    <br>
+    <button type="submit" [disabled]="!form.valid" md-raised-button color="primary">Submit</button>
+</form>
+    <!--<button md-raised-button color="primary" (click)="transferPubs()">Transfer data</button>-->

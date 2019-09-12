@@ -1,0 +1,443 @@
+<!--<div class="card-container loading-spinner-container" *ngIf="!volcano">-->
+<!--<md-spinner></md-spinner>-->
+<!--</div>-->
+<div class="card-container" *ngIf="!!volcano">
+  <div fxFlex="100">
+    <md-card>
+      <!--<md-card-title>Display</md-card-title>-->
+      <md-card-content>
+        <!--<img src="/assets/img/volcanoes-masthead.png" alt="Volcano">-->
+        <a md-button [routerLink]="['/access/display']">
+          Display
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <a md-button [routerLink]="['/access/volcano/' + id]">
+          {{volcano?.vd_name}}
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <!-- FIXME: baseon router >>>> next and next -->
+
+      </md-card-content>
+    </md-card>
+  </div>
+
+  <div fxFlex="100">
+    <!--FIXME: separate component-->
+    <md-card
+    >
+      <md-card-title>Volcano: {{volcano.vd_name}}</md-card-title>
+      <!--<img src="/assets/" alt="">-->
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <div class="google-map" id="volcano-map">
+          <!-- this creates a google map on the page with the given lat/lng from -->
+          <!-- the component as the initial center of the map: -->
+          <agm-map [latitude]="volcano.vd_inf_slat" [longitude]="volcano.vd_inf_slon" [zoom]="12" [minZoom]="4">
+            <agm-marker [latitude]="volcano.vd_inf_slat" [longitude]="volcano.vd_inf_slon"
+                        [iconUrl]="'/assets/img/volcano_icon.png'"
+            ></agm-marker>
+            <agm-marker *ngFor="let sp of allSamples" [latitude]="sp.sp_lat" [longitude]="sp.sp_lon"
+                        [iconUrl]="'/assets/img/sample_icon.png'"
+            >
+              <agm-snazzy-info-window [maxWidth]="400" [closeWhenOthersOpen]="true">
+                <ng-template>
+                  <a target="_blank" md-button [routerLink]="['/access/sample/' + sp.$key]" class="map-label">Sample
+                    {{sp.sp_name}}</a>
+                  <p class="map-des">
+                    <!--<b>CAVW</b>: {{sp?.vd_cavw}}-->
+                    <!--<br>-->
+                    <b>Position</b>: {{sp?.sp_lat}} (Lat) - {{sp?.sp_lon}} (Long)
+                    <br>
+                    <b>Amount</b>: {{sp?.sp_amount}}
+                    <br>
+                    <b>Description</b>: {{sp?.sp_remark}}
+                    <br>
+                  </p>
+                  <a role="button" target="_blank" md-button [routerLink]="['/access/sample/' + sp.$key]">Access
+                    Sample</a>
+                </ng-template>
+              </agm-snazzy-info-window>
+            </agm-marker>
+            <!--<agm-marker [latitude]="volcano.vd_inf_slat" [longitude]="volcano.vd_inf_slon"></agm-marker>-->
+            <!--<agm-marker [latitude]="volcano.vd_inf_slat + 0.005" [longitude]="volcano.vd_inf_slon + 0.005"></agm-marker>-->
+          </agm-map>
+        </div>
+        <p>
+          Map overlay list
+        </p>
+      </md-card-content>
+
+      <!--<md-card-actions>-->
+      <!--<button md-button>LIKE</button>-->
+      <!--<button md-button>SHARE</button>-->
+      <!--</md-card-actions>-->
+      <!--<md-card-footer>-->
+      <!--<md-progress-bar mode="indeterminate"></md-progress-bar>-->
+      <!--</md-card-footer>-->
+    </md-card>
+  </div>
+
+
+  <div fxFlex="100">
+    <md-card>
+      <md-card-title>Details</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <!--<form [formGroup]="form" (submit)="onSubmit()">-->
+        <div>
+          <div *ngFor="let k of formIncludeFields"
+               class="input-field"
+               mdTooltip="{{schema[k]['tooltip'] || k}}"
+          >
+            <md-input-container
+              *ngIf="['string', 'number', 'boolean'].indexOf(schema[k].type) > -1"
+            >
+              <input mdInput
+                     placeholder="{{schema[k]['placeholder'] || k}}"
+                     id="{{k}}"
+                     [(ngModel)]="volcano[k]"
+                     [disabled]="!isEditting"
+                     type="{{schema[k].type === 'string' ? 'text' : (schema[k].type === 'number' ? 'number' : (schema[k].type === 'boolean' ? 'checkbox' : 'text'))}}"
+              >
+              <!--formControlName="{{k}}"-->
+
+              <!-- TODO for array -->
+              <md-error>This field is required</md-error>
+            </md-input-container>
+
+            <!-- Checkbox -->
+            <div
+              class="input-container"
+              *ngIf="schema[k].type == 'array' && (schema[k]['input'] && schema[k]['input'] == 'checkbox')"
+            >
+              <label fxFlex="20" for="">{{schema[k]['placeholder'] || k}}</label>
+              <div fxFlex="80">
+                <md-checkbox
+                  *ngFor="let c of schema[k]['checkboxes'] || []"
+                  [disabled]="!isEditting"
+                >
+                  {{c}}
+                </md-checkbox>
+              </div>
+            </div>
+
+            <md-select
+              *ngIf="schema[k]['input'] && schema[k]['input'] === 'select'"
+              placeholder="{{schema[k]['placeholder'] || k}}"
+              [(ngModel)]="volcano[k]"
+              [disabled]="!isEditting"
+              id="{{k}}"
+            >
+              <md-option *ngFor="let c of schema[k]['choices'] || []" [value]="c.key">
+                {{c.value}}
+              </md-option>
+            </md-select>
+
+
+            <!--<br>-->
+          </div>
+          <!--TODO: SET OF SELECTION -->
+          <div mdTooltip="{{schema['vd_inf_status']['tooltip'] || 'vd_inf_status'}}">
+            <div class="card-container">
+              <label for="" fxFlex="10" class="checkbox-label">{{schema['vd_inf_status']['placeholder']}}</label>
+              <div fxFlex="90">
+                <md-selection-list #vd_inf_status_select>
+                  <!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>-->
+                  <div class="check-box-div" *ngFor="let c of schema['vd_inf_status']['checkboxes'] || []">
+
+                    <md-list-option [value]="c" [disabled]="!isEditting">{{c}}</md-list-option>
+                  </div>
+                  <div class="check-box-div">
+                    <md-input-container
+                    >
+                      <input mdInput
+                             placeholder="{{schema['vd_inf_status_other']['placeholder'] || 'vd_inf_status_other'}}"
+                             id="vd_inf_status_other"
+                             [(ngModel)]="volcano['vd_inf_status_other']"
+                             [disabled]="!isEditting"
+                      >
+                    </md-input-container>
+                  </div>
+                </md-selection-list>
+              </div>
+              <div fxFlex="100">
+                <hr>
+              </div>
+            </div>
+          </div>
+
+          <div mdTooltip="{{schema['vd_inf_type']['tooltip'] || 'vd_inf_type'}}">
+            <div class="card-container">
+              <label for="" fxFlex="10" class="checkbox-label">{{schema['vd_inf_type']['placeholder']}}</label>
+              <div fxFlex="90">
+                <md-selection-list #vd_inf_type_select>
+                  <!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>-->
+                  <div class="check-box-div" *ngFor="let c of schema['vd_inf_type']['checkboxes'] || []">
+
+                    <md-list-option [value]="c" [disabled]="!isEditting">{{c}}</md-list-option>
+                  </div>
+                  <div class="check-box-div">
+                    <md-input-container
+                    >
+                      <input mdInput
+                             placeholder="{{schema['vd_inf_type_other']['placeholder'] || 'vd_inf_type_other'}}"
+                             id="vd_inf_type_other"
+                             [(ngModel)]="volcano['vd_inf_type_other']"
+                             [disabled]="!isEditting"
+                      >
+                    </md-input-container>
+                  </div>
+                </md-selection-list>
+              </div>
+              <div fxFlex="100">
+                <hr>
+              </div>
+            </div>
+          </div>
+
+          <div mdTooltip="{{schema['vd_inf_rtype']['tooltip'] || 'vd_inf_type'}}">
+            <div class="card-container">
+              <label for="" fxFlex="10" class="checkbox-label">{{schema['vd_inf_rtype']['placeholder']}}</label>
+              <div fxFlex="90">
+                <md-selection-list #vd_inf_rtype_select>
+                  <!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>-->
+                  <div class="check-box-div" *ngFor="let c of schema['vd_inf_rtype']['checkboxes'] || []">
+
+                    <md-list-option [value]="c" [disabled]="!isEditting">{{c}}</md-list-option>
+                  </div>
+                  <div class="check-box-div">
+                    <md-input-container
+                    >
+                      <input mdInput
+                             placeholder="{{schema['vd_inf_rtype_other']['placeholder'] || 'vd_inf_rtype_other'}}"
+                             id="vd_inf_rtype_other"
+                             [(ngModel)]="volcano['vd_inf_rtype_other']"
+                             [disabled]="!isEditting"
+                      >
+                    </md-input-container>
+                  </div>
+                </md-selection-list>
+              </div>
+              <div fxFlex="100">
+                <hr>
+              </div>
+            </div>
+          </div>
+          <br>
+        </div>
+      </md-card-content>
+
+      <md-card-actions>
+        <md-slide-toggle
+          class="example-margin"
+          [color]="'primary'"
+          [checked]="isEditting"
+          (change)="isEditting = !isEditting"
+        >
+          EDIT
+        </md-slide-toggle>
+        <button md-raised-button colo="primary" (click)="onVolcanoSave()">Save</button>
+        <!--<button md-button>EDIT</button>-->
+        <!--<button md-button>SHARE</button>-->
+      </md-card-actions>
+      <!--<md-card-footer>-->
+      <!--<md-progress-bar mode="indeterminate"></md-progress-bar>-->
+      <!--</md-card-footer>-->
+    </md-card>
+  </div>
+  <div fxFlex="100">
+    <md-card>
+      <md-card-title>Description</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <p *ngIf="!isInfoEditting">{{volcano.vd_inf_desc}}</p>
+        <md-input-container
+          *ngIf="isInfoEditting"
+        >
+					<textarea mdInput
+                    placeholder="Description"
+                    [(ngModel)]="volcano['vd_inf_desc']"
+                    [disabled]="!isInfoEditting"
+          >
+					</textarea>
+          <!--formControlName="{{k}}"-->
+
+          <!-- TODO for array -->
+          <!--<md-error>This field is required</md-error>-->
+        </md-input-container>
+      </md-card-content>
+
+      <md-card-actions>
+        <md-slide-toggle
+          class="example-margin"
+          [color]="'primary'"
+          [checked]="isInfoEditting"
+          (change)="isInfoEditting = !isInfoEditting"
+        >
+          EDIT
+        </md-slide-toggle>
+        <button md-raised-button colo="primary" (click)="onVolcanoSave()">Save</button>
+        <!--<button md-button>SHARE</button>-->
+      </md-card-actions>
+      <!--<md-card-footer>-->
+      <!--<md-progress-bar mode="indeterminate"></md-progress-bar>-->
+      <!--</md-card-footer>-->
+    </md-card>
+  </div>
+  <div fxFlex="100">
+    <md-card>
+      <md-card-title>Eruption</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <md-select
+          placeholder="Eruption"
+          [(ngModel)]="selectedEruption"
+          (change)="onSelectEruption()"
+          id="eruption"
+        >
+          <md-option [value]="'all'">All eruptions</md-option>
+          <md-option *ngFor="let e of eruptionList" [value]="e.$key">
+            {{e.ed_name}}
+            |
+            Start: {{e.ed_stime}}
+            <!--({{e.ed_stime_bc}}) ({{e.ed_stime_bc}})-->
+            |
+            End: {{e.ed_etime}}
+            <!--({{e.ed_etime_bc}}) ({{e.ed_etime_bc}})-->
+            <!--|-->
+            <!--End: {{e.ed_}}-->
+            <!--({{e.ed_climax_bc}}) ({{e.ed_climax_unc}})-->
+          </md-option>
+        </md-select>
+
+      </md-card-content>
+
+      <md-card *ngIf="selectedEruption !== 'all' && selectedEruption !== ''">
+        <md-card-content>
+          <!--<md-input-container>-->
+          <!--<input mdInput [mdDatepicker]="testData" placeholder="Choose a date">-->
+          <!--<button mdSuffix [mdDatepickerToggle]="testData" (click)="tellTestData()"></button>-->
+          <!--</md-input-container>-->
+          <!--<md-datepicker id="datepicker" [(ngModel)]="testData"></md-datepicker>-->
+
+
+          <div>
+            <div *ngFor="let k of edFormIncludeFields"
+                 class="input-field"
+                 mdTooltip="{{edSchema[k]['tooltip'] || k}}"
+            >
+              <md-input-container
+                *ngIf="['string', 'number', 'boolean'].indexOf(edSchema[k].type) > -1"
+              >
+                <input mdInput
+                       placeholder="{{edSchema[k]['placeholder'] || k}}"
+                       id="{{k}}"
+                       [(ngModel)]="targetedEruption[k]"
+                       [disabled]="!isEdEditting"
+                       type="{{edSchema[k].type === 'string' ? 'text' : (edSchema[k].type === 'number' ? 'number' : (edSchema[k].type === 'boolean' ? 'checkbox' : 'text'))}}"
+                >
+                <!--formControlName="{{k}}"-->
+
+                <!-- TODO for array -->
+                <!--<button mdSuffix [mdDatepickerToggle]="picker" *ngIf="edSchema[k]['input'] == 'date'"></button>-->
+
+                <md-error>This field is required</md-error>
+              </md-input-container>
+              <!--<md-datepicker id="picker" *ngIf="edSchema[k]['input'] == 'date'"></md-datepicker>-->
+
+
+              <!--FIXME: datepicker-->
+              <!--<md-input-container>-->
+              <!--<input mdInput [mdDatepicker]="picker" placeholder="Choose a date">-->
+              <!--<button mdSuffix [mdDatepickerToggle]="picker"></button>-->
+              <!--</md-input-container>-->
+
+              <!-- Checkbox -->
+              <div
+                class="input-container"
+                *ngIf="edSchema[k].type == 'array' && (edSchema[k]['input'] && edSchema[k]['input'] == 'checkbox')"
+              >
+                <label fxFlex="20" for="">{{edSchema[k]['placeholder'] || k}}</label>
+                <div fxFlex="80">
+                  <md-checkbox
+                    *ngFor="let c of edSchema[k]['checkboxes'] || []"
+                    [disabled]="!isEdEditting"
+                  >
+                    {{c}}
+                  </md-checkbox>
+                </div>
+              </div>
+
+              <md-select
+                *ngIf="edSchema[k]['input'] && edSchema[k]['input'] === 'select'"
+                placeholder="{{edSchema[k]['placeholder'] || k}}"
+                [(ngModel)]="targetedEruption[k]"
+                [disabled]="!isEdEditting"
+                id="{{k}}"
+              >
+                <md-option *ngFor="let c of edSchema[k]['choices'] || []" [value]="c.key">
+                  {{c.value}}
+                </md-option>
+              </md-select>
+
+
+              <!--<br>-->
+            </div>
+            <br>
+            <md-slide-toggle
+              class="example-margin"
+              [color]="'primary'"
+              [checked]="isEdEditting"
+              (change)="isEdEditting = !isEdEditting"
+            >
+              EDIT
+            </md-slide-toggle>
+            <button md-raised-button colo="primary" (click)="onEruptionSave(targetedEruption)">Save</button>
+          </div>
+        </md-card-content>
+      </md-card>
+
+      <md-card>
+        <md-card-title>Sample List</md-card-title>
+        <md-card-content>
+          <div class="sample-list">
+
+            <md-nav-list dense>
+              <md-list-item
+                *ngFor="let sp of listedSamples"
+              >
+                <a md-line [routerLink]="['/access/sample/' + sp.$key]">{{sp.sp_name}}</a>
+                <!--<button md-icon-button (click)="infoClicked=!infoClicked">-->
+                <!--<md-icon class="material-icons">info</md-icon>-->
+                <!--</button>-->
+              </md-list-item>
+            </md-nav-list>
+          </div>
+
+        </md-card-content>
+      </md-card>
+
+      <!--<md-card-actions>-->
+      <!--<button md-button>LIKE</button>-->
+      <!--<button md-button>SHARE</button>-->
+      <!--</md-card-actions>-->
+      <!--<md-card-footer>-->
+      <!--<md-progress-bar mode="indeterminate"></md-progress-bar>-->
+      <!--</md-card-footer>-->
+    </md-card>
+  </div>
+
+  <div fxFlex="100">
+		<md-card>
+			<md-card-title>Projects</md-card-title>
+			<md-card-content>
+				<!--<button md-raised-button color="primary" (click)="getProjectList()" *ngIf="!projectList">Load Projects</button>-->
+				<app-project-table *ngIf="projectList" [projs]="projectList" [allowLoadSample]="true"></app-project-table>
+			</md-card-content>
+			<md-card-footer>
+				<!--<md-progress-bar mode="indeterminate" *ngIf="projectLoading"></md-progress-bar>-->
+			</md-card-footer>
+		</md-card>
+	</div>
+
+</div>

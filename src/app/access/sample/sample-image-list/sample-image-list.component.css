@@ -1,0 +1,8 @@
+.image-list-wrapper {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+a {
+	color: whitesmoke;
+}

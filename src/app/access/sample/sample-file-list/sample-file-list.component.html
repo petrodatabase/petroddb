@@ -1,0 +1,58 @@
+<md-nav-list dense>
+	<div *ngFor="let file of sample.linkf_list" class="card-container">
+		<div fxFlex="80">
+
+			<!--<a md-list-item href="{{file.file_url}}" download="{{file.file_name}}" >-->
+				<!--{{ file.file_name }}-->
+			<!--</a>-->
+      <a md-list-item href="{{globals.uploadHost}}/{{file.sp_id}}/{{file.img_id}}/{{file.stored_file_name}}" download="{{file.stored_file_name}}" >
+        {{file.stored_file_name}}
+      </a>
+		</div>
+		<div fxFlex="19">
+
+			<button md-raised-button color="warn" (click)="deleteFile(file)">X</button>
+		</div>
+	</div>
+</md-nav-list>
+
+
+<!--<md-list dense>-->
+	<!--<md-list-item *ngFor="let file of sample.linkf_list">-->
+		<!--<a role="button" md-button download href="{{file.file_url}}">{{file.file_name}}</a>-->
+	<!--</md-list-item>-->
+	<!---->
+	<!--&lt;!&ndash;<md-list-item> Salt </md-list-item>&ndash;&gt;-->
+	<!--&lt;!&ndash;<md-list-item> Paprika </md-list-item>&ndash;&gt;-->
+<!--</md-list>-->
+
+<md-card>
+	<md-card-content>
+		<!--<md-input-container>-->
+			<input type="file" id="sample-file-upload" ng2FileSelect [uploader]="uploader"
+				   (change)="detectFile($event)"
+				   name="file" #sampleFileUpload placeholder="Upload file here">
+			<button md-raised-button color="warn"
+					(click)="upload()"
+					[disabled]="isSelectedFile"
+			>
+				Upload</button>
+		<!--</md-input-container>-->
+	</md-card-content>
+	<md-card-footer>
+		<!--<md-progress-bar mode="indeterminate"></md-progress-bar>-->
+				<!--class="example-margin"-->
+		<!--<md-progress-bar-->
+				<!--*ngIf="currentUploadFile && currentUploadFile.progress != 100"-->
+				<!--[color]="primary"-->
+				<!--[mode]="determinate"-->
+				<!--[value]="currentUploadFile.progress"-->
+				<!--&gt;-->
+      <md-progress-bar
+        *ngIf="isUploading"
+        mode="Indeterminate"
+      >
+				<!--[bufferValue]="bufferValue">-->
+		</md-progress-bar>
+	</md-card-footer>
+</md-card>

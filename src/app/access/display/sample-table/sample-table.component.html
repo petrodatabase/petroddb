@@ -1,0 +1,101 @@
+<!--<div class="example-container mat-elevation-z8" [ngStyle]="{'max-width': _width + 'px'}">-->
+<div class="example-container mat-elevation-z8" [ngStyle]="{'width': '100%'}">
+	<div class="example-header">
+		<div class="example-section">
+			<div fxFlex="10" class="field-label">
+				<label class="example-label">Search Fields</label>
+			</div>
+			<div fxFlex="90" class="field-option">
+				<md-checkbox class="example-margin"
+							 *ngFor="let k of searchKeys"
+							 [(ngModel)]="searchFields[k]"
+							 (change)="onFieldSelectChange(k)"
+				>
+					{{schema[k]['name'] || schema[k]['placeholder']}}
+				</md-checkbox>
+			</div>
+		</div>
+		<div class="example-section">
+			<md-form-field floatPlaceholder="never">
+				<input mdInput #sp_filter
+					   placeholder="Search Sample: type each query keyword separated by comma(,). E.g: merapi,hand sample,01/01/2017"
+					   (keyup.enter)="search()"
+					   [disabled]="dataLoading"
+				>
+			</md-form-field>
+			<button md-raised-button (click)="search()" [disabled]="dataLoading">{{dataLoading ? 'Loading': 'Search'}}</button>
+		</div>
+	</div>
+
+	<md-table #table mdSort [dataSource]="dataSource" [ngStyle]="{'max-height': _height + 'px'}">
+
+		<!--- Note that these columns can be defined in any order.
+			  The actual rendered columns are set as a property on the row definition" -->
+
+		<!-- ID Column -->
+		<!--<ng-container mdColumnDef="">-->
+		<!--<md-header-cell *mdHeaderCellDef> ID </md-header-cell>-->
+		<!--<md-cell *mdCellDef="let row"> {{row.id}} </md-cell>-->
+		<!--</ng-container>-->
+
+		<!-- Progress Column -->
+		<!--<ng-container mdColumnDef="select">-->
+		<!--<md-header-cell *mdHeaderCellDef> Select</md-header-cell>-->
+		<!--<md-cell *mdCellDef="let row">-->
+		<!--<md-checkbox-->
+		<!--[(ngModel)]="selected[row.$key]">-->
+		<!--&lt;!&ndash;[disabled]="disabled">&ndash;&gt;-->
+		<!--</md-checkbox>-->
+		<!--</md-cell>-->
+		<!--</ng-container>-->
+
+		<ng-container mdColumnDef="sp_name">
+			<md-header-cell *mdHeaderCellDef md-sort-header> Name</md-header-cell>
+			<md-cell *mdCellDef="let row">
+				<a md-raised-button class="link-button" target="_blank" [routerLink]="['/access/sample/' + row.$key]">
+					<span class="link-label">{{row.sp_name}}</span>
+				</a>
+			</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="sp_coldate">
+			<md-header-cell *mdHeaderCellDef md-sort-header> Collection Date</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.sp_coldate}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="sp_amount">
+			<md-header-cell *mdHeaderCellDef md-sort-header> Amount</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.sp_amount}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="sp_type">
+			<md-header-cell *mdHeaderCellDef md-sort-header> Type</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.sp_type.join(",")}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="sp_rocktype">
+			<md-header-cell *mdHeaderCellDef md-sort-header> Rock Type</md-header-cell>
+			<!--<md-cell *mdCellDef="let row"> {{(!!row['sp_rocktype'] && row['sp_rocktype'].constructor === Array) ? row.sp_rocktype.join(","): ''}}</md-cell>-->
+			<md-cell *mdCellDef="let row"> {{(!!row['sp_rocktype']) ? row.sp_rocktype.join(","): ''}}</md-cell>
+		</ng-container>
+
+		<ng-container mdColumnDef="other">
+			<md-header-cell *mdHeaderCellDef>
+				<md-select [(ngModel)]="otherField" (change)="otherFieldChange()">
+					<!--<input type="text" mdInput [(ngModel)]="elementFilter" #eleFilter (change)="eleChange()" placeholder="Element">-->
+					<md-option [value]="''">Other</md-option>
+					<md-option [value]="k" *ngFor="let k of searchKeys">{{schema[k]['name'] || schema[k]['placeholder'] || k}}</md-option>
+				</md-select>
+			</md-header-cell>
+			<!--<md-cell *mdCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>-->
+			<md-cell *mdCellDef="let row"> {{((otherField != '' && row[otherField]) ? renderField(otherField, row[otherField]) : '')}}</md-cell>
+		</ng-container>
+
+		<!--<ng-container mdColumnDef="ref_name">-->
+		<!--<md-header-cell *mdHeaderCellDef> Name</md-header-cell>-->
+		<!--<md-cell *mdCellDef="let row"> {{row.ref_name}}</md-cell>-->
+		<!--</ng-container>-->
+
+		<!-- Name Column -->
+
+
+		<md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+		<md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+	</md-table>
+</div>

@@ -1,0 +1,134 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+	<div *ngFor="let k of formIncludeFields"
+		 class="input-field"
+		 mdTooltip="{{schema[k]['tooltip'] || k}}"
+	>
+		<md-input-container
+				*ngIf="['string', 'number', 'boolean'].indexOf(schema[k].type) > -1"
+		>
+			<input mdInput
+				   placeholder="{{schema[k]['placeholder'] || k}}"
+				   formControlName="{{k}}"
+				   id="{{k}}"
+				   type="{{schema[k].type === 'string' ? 'text' : (schema[k].type === 'number' ? 'number' : (schema[k].type === 'boolean' ? 'checkbox' : 'text'))}}"
+			>
+			<!-- TODO for array -->
+			<md-error>This field is required</md-error>
+		</md-input-container>
+
+		<!--&lt;!&ndash; Checkbox &ndash;&gt;-->
+		<!--<div-->
+				<!--class="card-container"-->
+				<!--*ngIf="schema[k].type == 'array' && (schema[k]['input'] && schema[k]['input'] == 'checkbox')"-->
+		<!--&gt;-->
+			<!--<label fxFlex="20" for="">{{schema[k]['placeholder'] || k}}</label>-->
+			<!--<div fxFlex="80">-->
+				<!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []">{{c}}</md-checkbox>-->
+			<!--</div>-->
+		<!--</div>-->
+
+		<md-select
+				*ngIf="schema[k]['input'] && schema[k]['input'] === 'select'"
+				placeholder="{{schema[k]['placeholder'] || k}}"
+				formControlName="{{k}}"
+				id="{{k}}"
+		>
+			<md-option *ngFor="let c of schema[k]['choices'] || []" [value]="c.key">
+				{{c.value}}
+			</md-option>
+		</md-select>
+
+
+		<!--<br>-->
+	</div>
+
+	<div mdTooltip="{{schema['vd_inf_status']['tooltip'] || 'vd_inf_status'}}">
+		<div class="card-container">
+			<label for="" fxFlex="10" class="checkbox-label">{{schema['vd_inf_status']['placeholder']}}</label>
+			<div fxFlex="90">
+				<md-selection-list #vd_inf_status_select>
+					<!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>-->
+					<!--<md-list-option *ngFor="let c of schema['vd_inf_status']['checkboxes'] || []" [value]="c">{{c}}</md-list-option>-->
+					<div class="check-box-div" *ngFor="let c of schema['vd_inf_status']['checkboxes'] || []">
+						<md-list-option  [value]="c">{{c}}</md-list-option>
+					</div>
+          <div class="check-box-div">
+            <md-input-container
+            >
+              <input mdInput
+                   placeholder="Other"
+                   formControlName="vd_inf_status_other"
+                   id="vd_inf_status_other"
+                   type="text"
+              >
+            </md-input-container>
+          </div>
+				</md-selection-list>
+			</div>
+			<div fxFlex="100">
+				<hr>
+			</div>
+		</div>
+	</div>
+
+	<div mdTooltip="{{schema['vd_inf_type']['tooltip'] || 'vd_inf_type'}}">
+		<div class="card-container">
+			<label for="" fxFlex="10" class="checkbox-label">{{schema['vd_inf_type']['placeholder']}}</label>
+			<div fxFlex="90">
+				<md-selection-list #vd_inf_type_select>
+					<!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>-->
+					<!--<md-list-option *ngFor="let c of schema['vd_inf_type']['checkboxes'] || []" [value]="c">{{c}}</md-list-option>-->
+					<div class="check-box-div" *ngFor="let c of schema['vd_inf_type']['checkboxes'] || []">
+						<md-list-option  [value]="c">{{c}}</md-list-option>
+					</div>
+          <div class="check-box-div">
+            <md-input-container
+            >
+              <input mdInput
+                   placeholder="Other"
+                   formControlName="vd_inf_type_other"
+                   id="vd_inf_type_other"
+                   type="text"
+              >
+            </md-input-container>
+          </div>
+				</md-selection-list>
+			</div>
+			<div fxFlex="100">
+				<hr>
+			</div>
+		</div>
+	</div>
+
+	<div mdTooltip="{{schema['vd_inf_rtype']['tooltip'] || 'vd_inf_type'}}">
+		<div class="card-container">
+			<label for="" fxFlex="10" class="checkbox-label">{{schema['vd_inf_rtype']['placeholder']}}</label>
+			<div fxFlex="90">
+				<md-selection-list #vd_inf_rtype_select>
+					<!--<md-checkbox *ngFor="let c of schema[k]['checkboxes'] || []" >{{c}}</md-checkbox>-->
+					<!--<md-list-option *ngFor="let c of schema['vd_inf_rtype']['checkboxes'] || []" [value]="c">{{c}}</md-list-option>-->
+					<div class="check-box-div" *ngFor="let c of schema['vd_inf_rtype']['checkboxes'] || []">
+						<md-list-option  [value]="c">{{c}}</md-list-option>
+					</div>
+          <div class="check-box-div">
+            <md-input-container
+            >
+              <input mdInput
+                   placeholder="Other"
+                   formControlName="vd_inf_rtype_other"
+                   id="vd_inf_rtype_other"
+                   type="text"
+              >
+            </md-input-container>
+          </div>
+				</md-selection-list>
+			</div>
+			<div fxFlex="100">
+				<hr>
+			</div>
+		</div>
+	</div>
+
+	<br>
+	<button type="submit" [disabled]="!form.valid" md-raised-button color="primary">Submit</button>
+</form>

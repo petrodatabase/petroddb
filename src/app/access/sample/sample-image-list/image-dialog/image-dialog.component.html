@@ -1,0 +1,16 @@
+<h2 md-dialog-title>
+	<a md-button [disabled]="!authenticated" (click)="onCloseCancel()" [routerLink]="['/access/imagealy/' + img.$key]" >{{img.img_name}}</a>
+</h2>
+
+<md-dialog-content>
+	<img src="{{globals.uploadHost}}/{{img.sp_id}}/{{img.$key}}/{{img.stored_file_name}}" alt="{{img.img_name}}">
+  <app-attach-metada [image]="img"></app-attach-metada>
+</md-dialog-content>
+<md-dialog-actions>
+	<button
+			md-raised-button
+			color="primary"
+			(click)="onCloseCancel()">Close
+	</button>
+</md-dialog-actions>
+

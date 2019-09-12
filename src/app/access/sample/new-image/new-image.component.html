@@ -1,0 +1,142 @@
+<md-expansion-panel [expanded]="panelExtended">
+	<md-expansion-panel-header>
+		<md-panel-title>
+			New Image
+		</md-panel-title>
+		<md-panel-description>
+			Upload New Image
+		</md-panel-description>
+	</md-expansion-panel-header>
+
+	<md-form-field>
+		<input mdInput
+			   type="text"
+			   placeholder="{{schema['img_name']['placeholder'] || 'img_name'}}"
+			   [(ngModel)]="newImage.img_name"
+			   required
+		>
+	</md-form-field>
+	<md-form-field>
+		<input mdInput
+			   type="text"
+			   placeholder="{{schema['img_des']['placeholder'] || 'img_des'}}"
+			   [(ngModel)]="newImage.img_des"
+			   required
+		>
+	</md-form-field>
+
+
+		<md-select
+				placeholder="{{schema['img_cat']['placeholder'] || 'img_cat'}}"
+				id="img_cat"
+				[(ngModel)]="newImage.img_cat"
+				required
+		>
+			<md-option [value]="">Unknown</md-option>
+			<md-option *ngFor="let cat of schema['img_cat']['choices'] || []" [value]="cat">
+				{{cat}}
+			</md-option>
+		</md-select>
+    <div *ngIf="newImage.img_cat=='Other'">
+      <md-form-field >
+        <input mdInput
+               type="text"
+               placeholder="Input category if choose Other"
+               [(ngModel)]="newImage.img_cat_other"
+        >
+      </md-form-field>
+    </div>
+
+	<!--</>-->
+
+	<!--<md-form-field>-->
+		<md-select
+				placeholder="{{schema['img_instr']['placeholder'] || 'img_instr'}}"
+				id="img_instr"
+				[(ngModel)]="newImage.img_instr"
+				required
+		>
+			<md-option [value]="">Unknown</md-option>
+			<md-option *ngFor="let cat of schema['img_instr']['choices'] || []" [value]="cat">
+				{{cat}}
+			</md-option>
+		</md-select>
+
+  <div  *ngIf="newImage.img_instr=='Other'">
+    <md-form-field >
+
+      <input mdInput
+             type="text"
+             placeholder="Input category if choose Other"
+             [(ngModel)]="newImage.img_instr_other"
+      >
+    </md-form-field>
+  </div>
+	<!--</md-form-field>-->
+
+
+
+	<md-form-field>
+		<input mdInput
+			   placeholder="{{schema['cm_stage_x']['placeholder'] || 'cm_stage_x'}}"
+			   [(ngModel)]="newImage.cm_stage_x"
+		>
+	</md-form-field>
+	<md-form-field>
+		<input mdInput
+			   placeholder="{{schema['cm_stage_y']['placeholder'] || 'cm_stage_y'}}"
+			   [(ngModel)]="newImage.cm_stage_y"
+		>
+	</md-form-field>
+	<md-form-field>
+		<input mdInput
+			   placeholder="{{schema['cm_fullsize_w']['placeholder'] || 'cm_fullsize_w'}}"
+			   [(ngModel)]="newImage.cm_fullsize_w"
+			   required
+		>
+	</md-form-field>
+	<md-form-field>
+		<input mdInput
+			   placeholder="{{schema['cm_fullsize_h']['placeholder'] || 'cm_fullsize_h'}}"
+			   [(ngModel)]="newImage.cm_fullsize_h"
+			   required
+		>
+	</md-form-field>
+	<md-form-field>
+		<input mdInput
+			   placeholder="{{schema['sm_micron_bar']['placeholder'] || 'sm_micron_bar'}}"
+			   [(ngModel)]="newImage.sm_micron_bar"
+			   required
+		>
+	</md-form-field>
+	<md-form-field>
+		<input mdInput
+			   placeholder="{{schema['sm_micron_marker']['placeholder'] || 'sm_micron_marker'}}"
+			   [(ngModel)]="newImage.sm_micron_bar"
+			   required
+		>
+	</md-form-field>
+
+  <p>Choose your picture to upload: </p>
+	<!--<md-form-field>-->
+	<div class="input-field">
+		<!--<input type="file" id="image-file" name="image-file" #imageFile (change)="onFileChange($event)">-->
+    <input type="file" name="photo" id="image-file" ng2FileSelect [uploader]="uploader" (change)="onFileChange($event)"/>
+	</div>
+	<!--</md-form-field>-->
+
+
+	<md-action-row>
+		<!--<button md-button color="primary" (click)="uploadImage()">Upload</button>-->
+    <button md-raised-button color="warn" (click)="uploadImageNg2()" [disabled]="!uploader.getNotUploadedItems().length">
+      Upload
+    </button>
+	</md-action-row>
+	<md-action-row *ngIf="loading">
+		<!--<button md-button color="primary" (click)="uploadImage()">Upload</button>-->
+		<md-progress-bar mode="indeterminate"></md-progress-bar>
+	</md-action-row>
+
+
+
+</md-expansion-panel>

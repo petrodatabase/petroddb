@@ -1,0 +1,19 @@
+<h2 md-dialog-title>Uploaded Projects</h2>
+
+<md-dialog-content>
+  <div class="link-list-container">
+    <md-nav-list>
+      <a md-list-item [routerLink]="['/access/project/' + proj.$key]" target="_blank"
+         *ngFor="let proj of projects; let i = index" [attr.data-index]="i">{{i}}: {{ proj.proj_name }} </a>
+    </md-nav-list>
+  </div>
+</md-dialog-content>
+
+<!--<md-dialog-actions [attr.align]="actionsAlignment">-->
+<md-dialog-actions>
+  <button
+          md-raised-button
+          color="primary"
+          (click)="onCloseCancel()">OK
+  </button>
+</md-dialog-actions>

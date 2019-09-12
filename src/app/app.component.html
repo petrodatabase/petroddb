@@ -1,0 +1,95 @@
+<md-toolbar color="primary">
+	<button md-icon-button (click)="sidenav.toggle()">
+		<md-icon class="md-24">menu</md-icon>
+	</button>
+	<!--<button role="link" [routerLink]="['/input']">-->
+		<!--input-->
+	<!--</button>-->
+	<!--<button role="link" [routerLink]="['/access']">-->
+		<!--access-->
+	<!--</button>-->
+
+	<div class="toolbar">
+    <h1>Volcano Petrology Database (VPD)</h1>
+    <div>
+      <!--<button md-button (click)="openAuthDialog()" [mdMenuTriggerFor]="menu">-->
+
+      <button md-button [mdMenuTriggerFor]="loginMenu" *ngIf="!isAuthenticated">
+        <!--<span>-->
+        <md-icon class="md-24">account_circle</md-icon>
+        <!--FIXME: Change to username or signuplogin-->
+        Login/Sign Up
+      </button>
+
+
+      <md-menu #loginMenu="mdMenu" >
+        <button md-menu-item (click)="loginGoogle()" type="button">Google</button>
+        <button md-menu-item (click)="loginEmailAndPassword()" type="button">Email & Password</button>
+        <!--<button md-menu-item (click)="loginFacebook()">Facebook</button>-->
+				<!--<button md-menu-item>Item 2</button>-->
+
+			</md-menu>
+
+			<button md-button *ngIf="isAuthenticated" (click)="openFeedback()">
+				<!--<span>-->
+				<md-icon class="md-24">question_answer</md-icon>
+				<!--FIXME: Change to username or signuplogin-->
+				Feedback
+			</button>
+
+			<a md-button *ngIf="isAuthenticated" [routerLink]="['/account']">
+				{{currentUsername}}
+			</a>
+			<button md-button *ngIf="isAuthenticated" (click)="logout()">
+				Logout
+			</button>
+
+
+			<!--<button md-button (click)="toggleTheme()">{{dark ? 'Light' : 'Dark'}} theme</button>-->
+			<!--<button md-button (click)="root.dir = (root.dir == 'rtl' ? 'ltr' : 'rtl')"-->
+					<!--title="Toggle between RTL and LTR">-->
+				<!--{{root.dir.toUpperCase()}}-->
+			<!--</button>-->
+		</div>
+	</div>
+	<!--<app-load></app-load>-->
+</md-toolbar>
+
+<div>
+  <md-sidenav-container #sidenavContainer>
+    <md-sidenav #sidenav>
+      <md-nav-list>
+        <a *ngFor="let navItem of navItems"
+           md-list-item
+           (click)="sidenav.close()"
+           routerLinkActive
+           #routerLinkActiveInstance="routerLinkActive"
+           [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1"
+           [routerLink]="[navItem.route]"
+        >
+          {{navItem.name}}
+        </a>
+
+        <hr>
+
+        <!--<a md-list-item-->
+           <!--tabindex="-1"-->
+           <!--(click)="sidenav.close()"-->
+           <!--[routerLink]="['/baseline']">-->
+          <!--Baseline-->
+        <!--</a>-->
+      </md-nav-list>
+      <!--<button md-button tabindex="-1" (click)="sidenav.close()">CLOSE</button>-->
+    </md-sidenav>
+    <app-load></app-load>
+
+    <!--<div>-->
+      <!--<div #root="dir" dir="ltr" class="root-content">-->
+      <router-outlet></router-outlet>
+      <!--</div>-->
+    <!--</div>-->
+  </md-sidenav-container>
+</div>
+
+
+

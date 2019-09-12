@@ -1,0 +1,17 @@
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <td>Project Creator</td>
+    <td>Project Date </td>
+    <td colspan="2">Actions</td>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr *ngFor="let project of projects">
+    <td>{{ project.proj_creator }}</td>
+    <td>{{ project.proj_date }}</td>
+  </tr>
+  </tbody>
+</table>
+<button md-raised-button color="primary" (click)="getProjects()" *ngIf="!projectList">Load All Projects</button>

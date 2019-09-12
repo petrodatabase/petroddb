@@ -1,0 +1,36 @@
+<h1>SnackBar demo</h1>
+<div>
+  <div>
+    Message: <md-form-field><input mdInput type="text" [(ngModel)]="message"></md-form-field>
+  </div>
+  <div>
+    <md-checkbox [(ngModel)]="action">
+      <p *ngIf="!action">Show button on snack bar</p>
+      <md-form-field *ngIf="action">
+        <input mdInput
+               type="text"
+               class="demo-button-label-input"
+               placeholder="Snack bar action label"
+               [(ngModel)]="actionButtonLabel">
+      </md-form-field>
+    </md-checkbox>
+  </div>
+  <div>
+    <md-checkbox [(ngModel)]="setAutoHide">
+      <p *ngIf="!setAutoHide">Auto hide after duration</p>
+      <md-form-field *ngIf="setAutoHide">
+        <input mdInput
+               type="number"
+               class="demo-button-label-input"
+               placeholder="Auto Hide Duration in ms"
+               [(ngModel)]="autoHide">
+      </md-form-field>
+    </md-checkbox>
+  </div>
+
+  <p>
+    <md-checkbox [(ngModel)]="addExtraClass">Add extra class to container</md-checkbox>
+  </p>
+</div>
+
+<button md-raised-button (click)="open()">OPEN</button>

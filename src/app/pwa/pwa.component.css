@@ -1,0 +1,30 @@
+#container {
+  margin: 0px auto;
+  width: 500px;
+  height: 375px;
+  border: 10px #333 solid;
+}
+
+.videoElement {
+  width: 100%;
+  /*width: 300px;*/
+  /*height: 300px;*/
+  /*width: 500px;*/
+  /*height: 500px;*/
+
+  background-color: #666;
+}
+
+.canvasElement {
+  /*width: 500px;*/
+  /*height: 500px;*/
+
+}
+
+
+video {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  /*width: 600px;*/
+  /*height: 600px;*/
+}

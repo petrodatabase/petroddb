@@ -1,0 +1,19 @@
+<h2 md-dialog-title>Uploaded Volcanoes</h2>
+
+<md-dialog-content>
+  <div class="link-list-container">
+    <md-nav-list>
+      <a md-list-item [routerLink]="['/access/volcano/' + vol.$key]" target="_blank"
+         *ngFor="let vol of volcanos; let i = index" [attr.data-index]="i">{{i}}: {{ vol.vd_name }} </a>
+    </md-nav-list>
+  </div>
+</md-dialog-content>
+
+<!--<md-dialog-actions [attr.align]="actionsAlignment">-->
+<md-dialog-actions>
+  <button
+          md-raised-button
+          color="primary"
+          (click)="onCloseCancel()">OK
+  </button>
+</md-dialog-actions>

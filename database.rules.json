@@ -1,0 +1,62 @@
+{
+	"rules": {
+		".read": "auth != null",
+		"volcano_time_update": {
+			".write": "auth != null"
+		},
+		"uploads": {
+			".write": "auth != null",
+			".indexOn": "linkItem_id"
+		},
+		"images": {
+			".indexOn": "sp_id",
+			".write": "auth != null"
+		},
+		"samples": {
+      ".write": "auth != null"
+    },
+		"analyses": {
+			".write": "auth != null"
+		},
+		"charts": {
+			".write": "auth != null"
+		},
+		"diffusions": {
+			".write": "auth != null"
+		},
+		"link_files": {
+			".write": "auth != null"
+		},
+		"observatories": {
+			".write": "auth != null"
+		},
+		"projects": {
+			".write": "auth != null"
+		},
+		"publications": {
+			".write": "auth != null"
+		},
+    "references": {
+			".write": "auth != null"
+		},
+		"volcanos": {
+			".write": "auth != null"
+		},
+		"workspaces": {
+			".write": "auth != null"
+		},
+		"eruptions": {
+			".write": "auth != null"
+		},
+		"users": {
+			".read": "auth != null",
+			"$uid": {
+				".write": "auth.uid == $uid"
+			}
+		},
+		"reports": {
+			".read": "auth != null",
+			".write": "auth != null"
+		}
+	}
+}

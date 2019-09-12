@@ -1,0 +1,43 @@
+<form [formGroup]="signupForm" (submit)="onSubmit()">
+
+	<md-input-container>
+		<input mdInput placeholder="First Name" formControlName="us_first" id="us_first">
+		<md-error>This field is required</md-error>
+	</md-input-container>
+	<md-input-container>
+		<input mdInput placeholder="Family Name" formControlName="us_family" id="us_family">
+		<md-error>This field is required</md-error>
+	</md-input-container>
+
+	<md-input-container>
+		<input mdInput placeholder="User name" formControlName="us_name" id="us_name">
+		<md-error>This field is required</md-error>
+	</md-input-container>
+
+	<md-input-container>
+		<input mdInput placeholder="Email" formControlName="email" type="email" id="email">
+		<md-error>This field requires valid email address</md-error>
+	</md-input-container>
+
+	<md-input-container>
+		<input mdInput placeholder="Password" formControlName="us_password" type="password" id="us_password">
+		<md-error>This field is required</md-error>
+	</md-input-container>
+
+	<!--<md-input-container>-->
+	<!--<button type="submit" [disabled]="!signupForm.valid" md-raised-button color="primary">Submit</button>-->
+	<button type="submit" md-raised-button color="primary">Submit</button>
+	<!--</md-input-container>-->
+
+	<!--<label for="firstName">First Name</label>-->
+	<!--<input type="text" id="firstName" formControlName="firstName">-->
+	<!--<label for="lastName">Last Name</label>-->
+	<!--<input type="text" id="lastName" formControlName="lastName">-->
+	<!--<label for="email">Email</label>-->
+	<!--<input type="email" id="email" formControlName="email">-->
+	<!--<label for="password">Password</label>-->
+	<!--<input type="password" id="password" formControlName="password">-->
+	<!--<button type="submit" [disabled]="!myForm.valid">Submit</button>-->
+</form>
+
+<md-progress-bar mode="indeterminate" *ngIf="signupLoading"></md-progress-bar>

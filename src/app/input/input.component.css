@@ -1,0 +1,29 @@
+
+
+.tab-content {
+	padding: 16px;
+}
+.demo-nav-bar, .tab-group {
+	border: 1px solid #e8e8e8;
+	margin-bottom: 40px;
+}
+.unicorn-dark-theme  {
+	border-color: #464646;
+}
+/*}*/
+
+.demo-nav-bar {
+	display: block;
+	padding: 12px;
+
+}
+sunny-routed-content,
+rainy-routed-content,
+foggy-routed-content {
+	display: block;
+	padding: 12px;
+}
+
+.tab-group {
+	flex-grow: 1;
+}

@@ -1,0 +1,31 @@
+<md-nav-list dense>
+  <div *ngFor="let file of image.metadata" class="card-container">
+    <div fxFlex="80">
+
+      <!--<a md-list-item href="{{file.file_url}}" download="{{file.file_name}}" >-->
+        <!--{{ file.file_name }}-->
+      <!--</a>-->
+      <a md-list-item href="{{globals.uploadHost}}/{{file.sp_id}}/{{file.img_id}}/{{file.stored_file_name}}" download="{{file.stored_file_name}}" >
+        {{file.stored_file_name}}
+      </a>
+
+    </div>
+    <div fxFlex="19">
+
+      <button md-raised-button color="warn" (click)="deleteMetadata(file)">X</button>
+    </div>
+  </div>
+</md-nav-list>
+
+
+<input type="file" id="metadata-upload" ng2FileSelect [uploader]="uploader"
+       (change)="detectMetadata($event)"
+       name="file" placeholder="Upload file here">
+
+
+<button md-raised-button color="warn"
+        (click)="uploadMetadata()"
+        [disabled]="isSelectedFile"
+>
+  Upload</button>
+

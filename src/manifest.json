@@ -1,0 +1,10 @@
+{
+  "name": "EOS Volcano Petrology",
+  "short_name": "EOS-VPD",
+  "theme_color": "#3894dd",
+  "background_color": "#2196f3",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/"
+}

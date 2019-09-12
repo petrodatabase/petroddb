@@ -1,0 +1,87 @@
+Space above cards: <input type="number" [formControl]="topHeightCtrl">
+<div [style.height.px]="topHeightCtrl.value"></div>
+<div class="demo-autocomplete">
+  <md-card>
+    Reactive length: {{ reactiveStates.length }}
+    <div>Reactive value: {{ stateCtrl.value | json }}</div>
+    <div>Reactive dirty: {{ stateCtrl.dirty }}</div>
+
+    <md-form-field floatPlaceholder="never">
+      <input mdInput placeholder="State" [mdAutocomplete]="reactiveAuto" [formControl]="stateCtrl">
+      <md-autocomplete #reactiveAuto="mdAutocomplete" [displayWith]="displayFn">
+        <md-option *ngFor="let state of reactiveStates | async" [value]="state">
+          <span>{{ state.name }}</span>
+          <span class="demo-secondary-text"> ({{state.code}}) </span>
+        </md-option>
+      </md-autocomplete>
+    </md-form-field>
+
+    <md-card-actions>
+      <button md-button (click)="stateCtrl.reset()">RESET</button>
+      <button md-button (click)="stateCtrl.setValue(states[10])">SET VALUE</button>
+      <button md-button (click)="stateCtrl.enabled ? stateCtrl.disable() : stateCtrl.enable()">
+        TOGGLE DISABLED
+      </button>
+    </md-card-actions>
+
+  </md-card>
+
+  <md-card>
+
+    <div>Template-driven value (currentState): {{ currentState }}</div>
+    <div>Template-driven dirty: {{ modelDir ? modelDir.dirty : false }}</div>
+
+    <!-- Added an ngIf below to test that autocomplete works with ngIf -->
+    <md-form-field *ngIf="true">
+      <input mdInput placeholder="State" [mdAutocomplete]="tdAuto" [(ngModel)]="currentState"
+        (ngModelChange)="tdStates = filterStates(currentState)" [disabled]="tdDisabled">
+      <md-autocomplete #tdAuto="mdAutocomplete">
+        <md-option *ngFor="let state of tdStates" [value]="state.name">
+          <span>{{ state.name }}</span>
+        </md-option>
+      </md-autocomplete>
+    </md-form-field>
+
+    <md-card-actions>
+      <button md-button (click)="modelDir.reset()">RESET</button>
+      <button md-button (click)="currentState='California'">SET VALUE</button>
+      <button md-button (click)="tdDisabled=!tdDisabled">
+        TOGGLE DISABLED
+      </button>
+    </md-card-actions>
+
+  </md-card>
+
+  <md-card>
+    <div>Option groups (currentGroupedState): {{ currentGroupedState }}</div>
+
+    <md-input-container>
+      <input
+        mdInput
+        placeholder="State"
+        [mdAutocomplete]="groupedAuto"
+        [(ngModel)]="currentGroupedState"
+        (ngModelChange)="filteredGroupedStates = filterStateGroups(currentGroupedState)">
+    </md-input-container>
+  </md-card>
+</div>
+
+<md-autocomplete #reactiveAuto="mdAutocomplete" [displayWith]="displayFn">
+  <md-option *ngFor="let state of reactiveStates | async" [value]="state">
+    <span>{{ state.name }}</span>
+    <span class="demo-secondary-text"> ({{state.code}}) </span>
+  </md-option>
+</md-autocomplete>
+
+<md-autocomplete #tdAuto="mdAutocomplete">
+  <md-option *ngFor="let state of tdStates" [value]="state.name">
+    <span>{{ state.name }}</span>
+  </md-option>
+</md-autocomplete>
+
+<md-autocomplete #groupedAuto="mdAutocomplete">
+  <md-optgroup *ngFor="let group of filteredGroupedStates"
+    [label]="'States starting with ' + group.letter">
+    <md-option *ngFor="let state of group.states" [value]="state.name">{{ state.name }}</md-option>
+  </md-optgroup>
+</md-autocomplete>

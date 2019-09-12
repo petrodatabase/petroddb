@@ -1,0 +1,55 @@
+.vis-workspace {
+	height: 500px;
+}
+
+.card-container {
+	display: flex;
+	flex-flow: row wrap;
+	/*height: 100%;*/
+}
+
+.workspace-control-button {
+	width: 100%;
+	/*display: block;*/
+	margin-top: 5px;
+}
+
+/* TODO: copy from vis source*/
+
+#operation {
+	font-size:28px;
+}
+#node-popUp {
+	display:none;
+	position:absolute;
+	top:350px;
+	left:170px;
+	z-index:299;
+	width:250px;
+	height:120px;
+	background-color: #f9f9f9;
+	border-style:solid;
+	border-width:3px;
+	border-color: #5394ed;
+	padding:10px;
+	text-align: center;
+}
+#edge-popUp {
+	display:none;
+	position:absolute;
+	top:350px;
+	left:170px;
+	z-index:299;
+	width:250px;
+	height:90px;
+	background-color: #f9f9f9;
+	border-style:solid;
+	border-width:3px;
+	border-color: #5394ed;
+	padding:10px;
+	text-align: center;
+}
+
+md-input-container {
+	width: auto;
+}

@@ -1,0 +1,73 @@
+<div class="example-container mat-elevation-z8">
+	<div class="example-header">
+		<md-form-field floatPlaceholder="never">
+			<input mdInput #dif_filter placeholder="Filter Traverse Name">
+		</md-form-field>
+	</div>
+
+	<md-table #table [dataSource]="dataSource">
+
+		<!--- Note that these columns can be defined in any order.
+			  The actual rendered columns are set as a property on the row definition" -->
+
+		<!-- ID Column -->
+		<!--<ng-container mdColumnDef="">-->
+		<!--<md-header-cell *mdHeaderCellDef> ID </md-header-cell>-->
+		<!--<md-cell *mdCellDef="let row"> {{row.id}} </md-cell>-->
+		<!--</ng-container>-->
+
+		<!-- Progress Column -->
+		<ng-container mdColumnDef="dif_name">
+			<md-header-cell *mdHeaderCellDef> Name</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.dif_name}}</md-cell>
+		</ng-container>
+
+		<!-- Name Column -->
+		<ng-container mdColumnDef="dif_instrument">
+			<md-header-cell *mdHeaderCellDef> Instrument</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.dif_instrument}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="dif_time">
+			<md-header-cell *mdHeaderCellDef> Time</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.dif_time}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="dif_comment">
+			<md-header-cell *mdHeaderCellDef> Comment</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.dif_comment}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="imgA_ratio_w">
+			<md-header-cell *mdHeaderCellDef> Ax</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.imgA_ratio_w}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="imgA_ratio_h">
+			<md-header-cell *mdHeaderCellDef> Ay</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.imgA_ratio_h}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="imgB_ratio_w">
+			<md-header-cell *mdHeaderCellDef> Bx</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.imgB_ratio_w}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="imgB_ratio_h">
+			<md-header-cell *mdHeaderCellDef> By</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.imgB_ratio_h}}</md-cell>
+		</ng-container>
+
+
+		<!--&lt;!&ndash; Color Column &ndash;&gt;-->
+		<!--<ng-container mdColumnDef="type">-->
+			<!--<md-header-cell *mdHeaderCellDef> Type</md-header-cell>-->
+			<!--<md-cell *mdCellDef="let row"> {{row.aly_type}}</md-cell>-->
+		<!--</ng-container>-->
+
+		<!--<ng-container mdColumnDef="instrument">-->
+			<!--<md-header-cell *mdHeaderCellDef> Color</md-header-cell>-->
+			<!--&lt;!&ndash;<md-cell *mdCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>&ndash;&gt;-->
+			<!--<md-cell *mdCellDef="let row"> {{row.aly_instrument}}</md-cell>-->
+
+		<!--</ng-container>-->
+
+
+		<md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+		<md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+	</md-table>
+</div>

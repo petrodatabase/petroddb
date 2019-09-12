@@ -1,0 +1,341 @@
+<div class="card-container"  *ngIf="!!proj && !!permission && permission!= modelPermission.INVISIBLE">
+  <div fxFlex="100">
+    <md-card>
+      <!--<md-card-title>Display</md-card-title>-->
+      <md-card-content>
+        <!--<img src="/assets/img/volcanoes-masthead.png" alt="Volcano">-->
+        <a md-button [routerLink]="['/access/display']">
+          Display
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <a md-button [disabled]="true">
+          {{proj?.proj_name}}
+          <i class="material-icons">keyboard_arrow_right</i>
+        </a>
+        <!-- FIXME: baseon router >>>> next and next -->
+      </md-card-content>
+    </md-card>
+  </div>
+
+  <div fxFlex="100">
+    <!--FIXME: separate component-->
+    <md-card
+    >
+      <md-card-title>Project: {{proj?.proj_name}}</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <form *ngIf="proj">
+          <div>
+            <div class="input-field" mdTooltip="{{schema['proj_pi']['tooltip'] || 'proj_pi'}}">
+              <md-select
+                placeholder="{{schema['proj_pi']['placeholder'] || 'proj_pi'}}"
+                id="proj_pi"
+                name="proj_pi"
+                [(ngModel)]="proj.proj_pi.$key"
+                [disabled]="!isEditting"
+                required
+              >
+                <md-option [value]="">Unknown</md-option>
+                <md-option *ngFor="let us of piList" [value]="us.$key">
+                  {{(us.us_family != '' && us.us_first != '') ? (us.us_first + ' ' + us.us_family) : us.displayName}}
+                </md-option>
+              </md-select>
+            </div>
+
+            <md-input-container style="width: 49%;"
+            >
+              <input mdInput
+                     placeholder="{{schema['proj_pi_email']['placeholder'] || 'proj_pi_email'}}"
+                     id="proj_pi_email"
+                     name="proj_pi_email"
+                     type="text"
+                     [(ngModel)]="proj.proj_pi_email"
+                     [disabled]="!isEditting"
+              >
+              <!-- TODO for array -->
+              <md-error>This field is required</md-error>
+            </md-input-container>
+          </div>
+
+          <!--<div class="input-field" mdTooltip="{{schema['proj_contact']['tooltip'] || 'proj_contact'}}">-->
+          <!--<md-select-->
+          <!--placeholder="{{schema['proj_contact']['placeholder'] || 'proj_contact'}}"-->
+          <!--id="proj_contact"-->
+          <!--name="proj_contact"-->
+          <!--[(ngModel)]="proj.proj_contact.$key"-->
+          <!--[disabled]="!isEditting"-->
+          <!--&gt;-->
+          <!--<md-option [value]="">Unknown</md-option>-->
+          <!--<md-option *ngFor="let us of userList" [value]="us.$key">-->
+          <!--{{(us.us_family != '' && us.us_first != '') ? (us.us_first + ' ' + us.us_family) : us.displayName}}-->
+          <!--</md-option>-->
+          <!--</md-select>-->
+          <!--</div>-->
+
+          <div class="input-field" mdTooltip="{{schema['proj_creator']['tooltip'] || 'proj_creator'}}">
+            <md-select
+              placeholder="{{schema['proj_creator']['placeholder'] || 'proj_creator'}}"
+              id="proj_creator"
+              name="proj_creator"
+              [(ngModel)]="proj.proj_creator.$key"
+              [disabled]="!isEditting"
+            >
+              <md-option [value]="">Unknown</md-option>
+              <md-option *ngFor="let us of userList" [value]="us.$key">
+                {{(us.us_family != '' && us.us_first != '') ? (us.us_first + ' ' + us.us_family) : us.displayName}}
+              </md-option>
+            </md-select>
+          </div>
+
+          <md-input-container style="width: 49%;"
+          >
+            <input mdInput
+                   placeholder="{{schema['proj_creator_email']['placeholder'] || 'proj_creator_email'}}"
+                   id="proj_creator_email"
+                   name="proj_creator_email"
+                   type="text"
+                   [(ngModel)]="proj.proj_creator_email"
+                   [disabled]="!isEditting"
+            >
+            <!-- TODO for array -->
+            <md-error>This field is required</md-error>
+          </md-input-container>
+
+          <md-input-container class="newline"
+          >
+            <input mdInput
+                   placeholder="{{schema['proj_name']['placeholder'] || 'proj_name'}}"
+                   id="proj_name"
+                   name="proj_name"
+                   type="text"
+                   [(ngModel)]="proj.proj_name"
+                   [disabled]="!isEditting"
+                   required
+            >
+            <!-- TODO for array -->
+            <md-error>This field is required</md-error>
+          </md-input-container>
+
+
+
+
+          <md-input-container class="newline"
+          >
+            <input mdInput
+                   placeholder="{{schema['proj_date']['placeholder'] || 'proj_date'}}"
+                   id="proj_date"
+                   name="proj_date"
+                   type="text"
+                   [(ngModel)]="proj.proj_date"
+                   [disabled]="!isEditting"
+                   required
+            >
+            <!-- TODO for array -->
+            <md-error>This field is required</md-error>
+          </md-input-container>
+
+          <md-input-container class="newline"
+          >
+            <input mdInput
+                   placeholder="{{schema['proj_des']['placeholder'] || 'proj_des'}}"
+                   id="proj_des"
+                   name="proj_des"
+                   type="text"
+                   [(ngModel)]="proj.proj_des"
+                   [disabled]="!isEditting"
+
+            >
+            <!-- TODO for array -->
+            <md-error>This field is required</md-error>
+          </md-input-container>
+
+
+          <!-- Boolean -->
+          <!-- Access type: only able to edit if user are PI/Creator/Contact-->
+          <div *ngIf="isPI_Creator_Contact" >
+            <md-checkbox
+              [(ngModel)]= "isPrivate"
+              [ngModelOptions]="{standalone: true}"
+              (click) ="updateAccess(isPrivate)"
+              [disabled] = !isEditting
+            >
+              {{reference['isPrivate']['placeholder'] || 'isPrivate'}}
+            </md-checkbox>
+
+            <md-checkbox
+
+              [(ngModel)]="isReadonlyAccess"
+              [ngModelOptions]="{standalone: true}"
+              (click) ="updateAccess(isReadonlyAccess)"
+              [disabled] = !isEditting
+            >
+              {{reference['isReadonlyAccess']['placeholder'] || 'isReadonlyAccess'}}
+            </md-checkbox>
+
+            <md-checkbox
+
+              [(ngModel)]="isPublicAccess"
+              [ngModelOptions]="{standalone: true}"
+              (click) ="updateAccess(isPublicAccess)"
+              [disabled] = !isEditting
+            >
+              {{reference['isPublicAccess']['placeholder'] || 'isPublicAccess'}}
+            </md-checkbox>
+
+            <md-checkbox
+
+              [(ngModel)]="isCustomized"
+              [ngModelOptions]="{standalone: true}"
+              (click) ="updateAccess(isCustomized)"
+              [disabled] = !isEditting
+            >
+              {{reference['isCustomized']['placeholder'] || 'isCustomized'}}
+            </md-checkbox>
+          </div>
+
+          <div style="color:red">
+            <p [hidden]="!isPrivate" >
+              <em>*Note: This project is only visible and fully editable by PI, Creator, Contact.</em>
+            </p>
+            <p [hidden]="!isReadonlyAccess">
+              <em>*Note: This project is visible to everyone. However, only PI, Creator, Contact can fully edit.</em>
+            <p [hidden]="!isPublicAccess" >
+              <em>*Note: This project is visible and editable by everyone. However, only PI, Creator, Contact can change Authorities.</em>
+            </p>
+            <p [hidden]="!isCustomized">
+              <em>*Note: This project is visible and editable by anyone who is assigned. However, only PI, Creator, Contact can change Authorities.</em>
+
+            </p>
+          </div>
+
+          <!--<div [hidden]="!isCustomized || !isPI_Creator_Contact" mdTooltip="{{schema['proj_autho']['tooltip'] || 'proj_autho'}}">-->
+          <!--<div class="card-container">-->
+          <!--<label for="" fxFlex="10" class="checkbox-label">{{schema['proj_autho']['placeholder']}}</label>-->
+          <!--<div fxFlex="90" class="autho-list">-->
+          <!--<md-selection-list #proj_autho_set>-->
+
+          <!--<div class="check-box-div"  *ngFor="let us of userList">-->
+          <!--<md-list-option #proj_autho_set_options [value]="us.$key" [disabled]="!isEditting">{{us.displayName}}</md-list-option>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--</md-selection-list>-->
+          <!--</div>-->
+          <!--<div fxFlex="100">-->
+          <!--<hr>-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->
+
+          <!--<div [hidden]="!isCustomized || !isPI_Creator_Contact" mdTooltip="{{schema['proj_autho_read_only']['tooltip'] || 'proj_autho_read_only'}}">-->
+          <!--<div class="card-container">-->
+          <!--<label for="" fxFlex="10" class="checkbox-label">{{schema['proj_autho_read_only']['placeholder']}}</label>-->
+          <!--<div fxFlex="90" class="autho-list">-->
+          <!--<md-selection-list #proj_autho_read_only_set>-->
+          <!--<div class="check-box-div" *ngFor="let us of userList">-->
+          <!--<md-list-option #proj_autho_read_only_set_options [value]="us.$key" [disabled]="!isEditting">{{us.displayName}}</md-list-option>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--</md-selection-list>-->
+          <!--</div>-->
+          <!--<div fxFlex="100">-->
+          <!--<hr>-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->
+
+
+          <div [hidden]="!isCustomized || !isPI_Creator_Contact" mdTooltip="{{schema['proj_autho']['tooltip'] || 'proj_autho'}}">
+            <div class="card-container">
+              <label for="" fxFlex="10" class="checkbox-label">{{schema['proj_autho']['placeholder']}}</label>
+              <div fxFlex="90" class="autho-list">
+
+                <ngx-select [multiple]="true"
+                            [items]="userlisttoString"
+                            [disabled]="!isEditting"
+                            [(ngModel)]="authorFull"
+                            placeholder="No authors selected"
+                            [ngModelOptions]="{standalone: true}" >
+                </ngx-select>
+
+              </div>
+              <div fxFlex="100">
+                <hr>
+              </div>
+            </div>
+          </div>
+
+          <div [hidden]="!isCustomized || !isPI_Creator_Contact" mdTooltip="{{schema['proj_autho_read_only']['tooltip'] || 'proj_autho_read_only'}}">
+            <div class="card-container">
+              <label for="" fxFlex="10" class="checkbox-label">{{schema['proj_autho_read_only']['placeholder']}}</label>
+              <div fxFlex="90" class="autho-list">
+
+                <ngx-select [multiple]="true"
+                            [items]="userlisttoString"
+                            [disabled]="!isEditting"
+                            [(ngModel)]="authorRead"
+                            placeholder="No authors selected"
+                            [ngModelOptions]="{standalone: true}" >
+                </ngx-select>
+
+              </div>
+              <div fxFlex="100">
+                <hr>
+              </div>
+            </div>
+          </div>
+
+          <!--<br>-->
+          <!--<button type="submit" [disabled]="!form.valid" md-raised-button color="primary">Submit</button>-->
+        </form>
+      </md-card-content>
+
+
+      <md-card-actions>
+        <md-slide-toggle
+          *ngIf="editable"
+          class="example-margin"
+          [color]="'primary'"
+          [checked]="isEditting"
+          (change)="isEditting = !isEditting"
+        >
+          EDIT
+        </md-slide-toggle>
+        <button md-raised-button *ngIf="isEditting" (click)="updateChange()">Save</button>
+      </md-card-actions>
+
+      <!--<md-card-actions>-->
+      <!--<button md-button>LIKE</button>-->
+      <!--<button md-button>SHARE</button>-->
+      <!--</md-card-actions>-->
+      <!--<md-card-footer>-->
+      <!--<md-progress-bar mode="indeterminate"></md-progress-bar>-->
+      <!--</md-card-footer>-->
+    </md-card>
+  </div>
+
+
+  <div fxFlex="100">
+    <md-card>
+      <md-card-title>Sample List</md-card-title>
+      <!--<md-card-subtitle>Subtitle</md-card-subtitle>-->
+      <md-card-content>
+        <!--<a [routerLink]="['/access/sample/asdasdasd']">Test sample</a>-->
+        <!--<a *ngFor="let sp of sampleList | async" [routerLink]="['/access/sample/' + sp.$key]">{{sp.sp_name}}</a>-->
+        <div class="link-list">
+          <a md-button class="link-button" role="link" *ngFor="let sp of sampleList" [routerLink]="['/access/sample/' + sp.$key]">
+            <span class="link-label">{{sp.sp_name}}</span>
+          </a>
+        </div>
+
+      </md-card-content>
+
+      <!--<md-card-actions>-->
+      <!--<button md-button color="warn" (click)="deleteNullSamples(sampleList)">Delete All Null Samples</button>-->
+      <!--</md-card-actions>-->
+      <!--<md-card-footer>-->
+      <!--<md-progress-bar mode="indeterminate" *ngIf="sampleLoading"></md-progress-bar>-->
+      <!--</md-card-footer>-->
+    </md-card>
+  </div>
+
+</div>

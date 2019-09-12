@@ -1,0 +1,71 @@
+<div class="card-container">
+	<md-card fxFlex="100">
+		<md-card-content>
+			<md-slide-toggle
+					class="example-margin"
+					[color]="'primary'"
+					[checked]="infoEditting"
+					(change)="infoEditting = !infoEditting"
+			>
+				EDIT
+			</md-slide-toggle>
+			<md-input-container>
+				<input mdInput
+					   placeholder="Workspace Name"
+					   id="ws_name"
+					   [(ngModel)]="workspace.ws_name"
+					   [disabled]="!infoEditting || !authenticated"
+					   type="text"
+					   required
+				>
+				<md-error>This field is required</md-error>
+			</md-input-container>
+			<md-input-container>
+				<input mdInput
+					   placeholder="Description"
+					   id="ws_des"
+					   [(ngModel)]="workspace.ws_des"
+					   [disabled]="!infoEditting || !authenticated"
+					   type="text"
+					   required
+				>
+				<md-error>This field is required</md-error>
+			</md-input-container>
+
+		</md-card-content>
+	</md-card>
+	<md-card fxFlex="80">
+		<md-card-content class="workspace-board">
+			<div id="vis-workspace-{{workspace.$key}}" class="vis-workspace"></div>
+		</md-card-content>
+	</md-card>
+	<md-card fxFlex="15">
+		<md-card-content class="workspace-control">
+
+			<button class="workspace-control-button"
+					[disabled]="!authenticated"
+					color="warn" md-raised-button (click)="onNewWorkspace()"
+					>New</button>
+
+			<button class="workspace-control-button"
+					[disabled]="!authenticated"
+					color="warn" md-raised-button (click)="onDelete()"
+					>Delete</button>
+
+			<button class="workspace-control-button"
+					[disabled]="!authenticated"
+					color="accent" md-raised-button (click)="duplicate()"
+					>Duplicate</button>
+
+			<button class="workspace-control-button"
+					[disabled]="!authenticated"
+					color="accent" md-raised-button (click)="onUndo()"
+					[disabled]="editQueue.length == 0">Undo</button>
+
+			<button class="workspace-control-button"
+					[disabled]="!authenticated"
+					color="primary" md-raised-button (click)="onSave()"
+					>Save</button>
+		</md-card-content>
+	</md-card>
+</div>

@@ -1,0 +1,207 @@
+<md-card>
+	<md-card-content>
+		<md-tab-group class="tab-group" dynamicHeight (selectChange)="tabSelectChange($event)"
+					  [(selectedIndex)]="selectedTabIndex">
+			<!--<md-tab *ngFor="let ws of workspaces; let i = index">-->
+			<!--<ng-template md-tab-label>{{ws.ws_name}}</ng-template>-->
+			<!--<div class="tab-content">-->
+			<!--&lt;!&ndash;<form [formGroup]="myForm" (ngSubmit)="onSubmit()">&ndash;&gt;--
+			<!--<app-workspace [workspace]="ws" [index]="i" [sample]="sample" (onDuplicate)="onDuplicate($event)"></app-workspace>-->
+			<!--</div>-->
+			<!--</md-tab>-->
+			<md-tab>
+				<ng-template md-tab-label>Visibility</ng-template>
+				<div class="tab-content">
+					<md-button-toggle [checked]="pointAlyVisible" (change)="pointAlyVisible = !pointAlyVisible">Point Analysis ({{pointAlyVisible ? 'ON': 'OFF'}})</md-button-toggle>
+					<md-button-toggle [checked]="difVisible" (change)="difVisible = !difVisible">Traverse ({{difVisible ? 'ON': 'OFF'}})</md-button-toggle>
+					<md-button-toggle [checked]="plagVisible" (change)="plagVisible = !plagVisible">Plagioclase ({{plagVisible ? 'ON': 'OFF'}})</md-button-toggle>
+				</div>
+			</md-tab>
+			<md-tab>
+				<ng-template md-tab-label>Point Analysis</ng-template>
+				<div class="tab-content">
+          <md-button-toggle [checked]="pointAlyVisible" (change)="pointAlyVisible = !pointAlyVisible">Point Analysis ({{pointAlyVisible ? 'ON': 'OFF'}})</md-button-toggle>
+					<md-tab-group class="tab-group" dynamicHeight [(selectedIndex)]="pointAlyTabIndex"
+								  (selectChange)="onPointAlyTabIndexChange()"
+					>
+						<md-tab>
+							<ng-template md-tab-label>Guide</ng-template>
+							<div class="tab-content">
+								This is some guide for you
+							</div>
+						</md-tab>
+						<md-tab>
+							<ng-template md-tab-label>Create</ng-template>
+							<div class="tab-content">
+								<div>
+									<h2>upload file here</h2>
+									<p>See template here: <a href="/assets/excels/AnalysisTemplate.xls" download>Analysis Template</a></p>
+									<md-select placeholder="Analysis type" [(ngModel)]="newPointAlyType" (change)="onNewPointAlyTypeChange()">
+										<md-option *ngFor="let t of analysisSchema.aly_type['choices'] || []" [value]="t">
+											{{ t }}
+										</md-option>
+									</md-select>
+									<input type="file" name="analyses" ng2FileSelect [uploader]="uploader" #newPointAlyFile id="new-point-alys" (change)="onPointAlyFileChange($event)" />
+								</div>
+							</div>
+						</md-tab>
+						<md-tab>
+							<ng-template md-tab-label>Edit</ng-template>
+							<div class="tab-content">
+								You can freely change the direction of the points, then press confirm to save
+							</div>
+						</md-tab>
+						<md-tab>
+							<ng-template md-tab-label>Remove</ng-template>
+							<div class="tab-content">
+								Click to drag a region to select one or more points to remove them, then press confirm to save
+							</div>
+              <!--<button md-raised-button color="warn" (click)="onClickDeleteAll()">Remove all points and charts</button>-->
+						</md-tab>
+
+					</md-tab-group>
+
+					<button *ngIf="pointAlyTabIndex != 0" md-raised-button color="primary" (click)="onPointAlyConfirm()">Confirm</button>
+					<md-progress-bar *ngIf="pointAlyLoading" mode="indeterminate"></md-progress-bar>
+				</div>
+			</md-tab>
+			<md-tab>
+				<ng-template md-tab-label>Traverse</ng-template>
+				<div class="tab-content">
+          <md-button-toggle [checked]="difVisible" (change)="difVisible = !difVisible">Traverse ({{difVisible ? 'ON': 'OFF'}})</md-button-toggle>
+					<md-tab-group class="tab-group" dynamicHeight [(selectedIndex)]="difTabIndex"
+								  (selectChange)="onDifTabIndexChange()"
+					>
+						<md-tab>
+							<ng-template md-tab-label>Guide</ng-template>
+							<div class="tab-content">
+								This is some guide for you
+							</div>
+						</md-tab>
+						<md-tab>
+							<ng-template md-tab-label>Create</ng-template>
+							<div class="tab-content">
+								<div>
+									<h2>upload file here</h2>
+									<!--<md-select placeholder="Analysis type" [(ngModel)]="newPointAlyType" (change)="onNewPointAlyTypeChange()">-->
+										<!--<md-option *ngFor="let t of analysisSchema.aly_type['choices'] || []" [value]="t">-->
+											<!--{{ t }}-->
+										<!--</md-option>-->
+									<!--</md-select>-->
+									<p>See template here: <a href="/assets/excels/traverse_template.xls" download>Traverse Template</a></p>
+									<p>Or see test data here: <a href="/assets/excels/traverse_test_data.xls" download>Traverse Test data</a></p>
+									<md-input-container>
+										<input name="dif_name" type="text" mdInput [(ngModel)]="newDiffusion.dif_name" placeholder="Traverse Name">
+									</md-input-container>
+									<!--<input type="file" #newDifFile id="new-diffusion" (change)="onDifFileChange($event)" multiple="false" />-->
+                  <input type="file" name="diffusion" ng2FileSelect [uploader]="uploaderDiff" #newDifFile id="new-diffusion" (change)="onDifFileChange($event)" />
+
+                </div>
+							</div>
+						</md-tab>
+						<md-tab>
+							<ng-template md-tab-label>Edit</ng-template>
+							<div class="tab-content">
+								You can freely change the direction of the points, then press confirm to save
+							</div>
+						</md-tab>
+						<md-tab>
+							<ng-template md-tab-label>Remove</ng-template>
+							<div class="tab-content">
+								Click a point to select one or more points to remove them, then press confirm to save
+							</div>
+						</md-tab>
+
+					</md-tab-group>
+					<button *ngIf="difTabIndex != 0" md-raised-button color="primary" (click)="onDifConfirm()">Confirm</button>
+					<md-progress-bar *ngIf="difLoading" mode="indeterminate"></md-progress-bar>
+				</div>
+			</md-tab>
+
+      <!--NOTE : Remove Plagioclase-->
+			<!--<md-tab>-->
+				<!--<ng-template md-tab-label>Plagioclase</ng-template>-->
+				<!--<div class="tab-content">-->
+          <!--<md-button-toggle [checked]="plagVisible" (change)="plagVisible = !plagVisible">Plagioclase ({{plagVisible ? 'ON': 'OFF'}})</md-button-toggle>-->
+					<!--<md-tab-group class="tab-group" dynamicHeight-->
+					<!--&gt;-->
+						<!--<md-tab>-->
+							<!--<ng-template md-tab-label>Guide</ng-template>-->
+							<!--<div class="tab-content">-->
+								<!--<span class="plag-visible-status">Plagioclase Mode: <b><i>{{(plagVisible ? 'Enabled' : 'Disabled')}}</i></b></span>-->
+								<!--<br>-->
+								<!--Drag a region from top - left to bottom - right to select region to examine, press <b><i>Plot</i></b>-->
+								<!--to plot histogram, press <b><i>Reset</i></b> to reset region and histogram graph-->
+								<!--<br>-->
+								<!--Annotation follow linear relationship with greyscale in the following equation-->
+								<!--<br>-->
+								<!--<br>-->
+								<!--<div>-->
+								<!--Grey Scale *-->
+								<!--<md-input-container class="plag-input">-->
+									<!--<input type="number" mdInput [(ngModel)]="plagCoeff" (change)="plagCoeff = +plagCoeff" placeholder="Coefficient">-->
+								<!--</md-input-container>-->
+								<!--+-->
+								<!--<md-input-container class="plag-input">-->
+									<!--<input type="number" mdInput [(ngModel)]="plagBias" (change)="plagBias = +plagBias"  placeholder="Bias">-->
+								<!--</md-input-container>-->
+								<!--= Annotation-->
+
+								<!--<button md-raised-button (click)="plotPlagioclase()">Plot</button>-->
+								<!--<button md-raised-button (click)="resetPlag()">Reset</button>-->
+								<!--</div>-->
+								<!--<div>-->
+								<!--<canvas baseChart *ngIf="plagioclaseChart.data.length > 0"-->
+										<!--height="450"-->
+										<!--[datasets]="plagioclaseChart.data"-->
+										<!--[labels]="plagioclaseChart.labels"-->
+										<!--[options]="plagioclaseChart.options"-->
+										<!--[legend]="plagioclaseChart.legend"-->
+										<!--[chartType]="plagioclaseChart.type"-->
+										<!--(chartHover)="plagioclaseChart.hover($event)"-->
+										<!--(chartClick)="plagioclaseChart.click($event)"></canvas>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</md-tab>-->
+					<!--</md-tab-group>-->
+				<!--</div>-->
+			<!--</md-tab>-->
+
+
+		</md-tab-group>
+	</md-card-content>
+</md-card>
+<md-card>
+	<md-card-content>
+		<div class="image-panel-wrapper">
+			<img src="{{globals.uploadHost}}/{{image.sp_id}}/{{image.$key}}/{{image.stored_file_name}}" alt="{{image.img_name}}" id="image-info" (load)="onImageLoaded()" [ngStyle]="{'width': getCanvasWidth() + 'px', 'height': getCanvasHeight() + 'px'}">
+
+			<div id="point-aly-wrapper" class="canvas-wrapper"
+				 [ngStyle]="{'width': getCanvasWidth() + 'px', 'height': getCanvasHeight() + 'px'}"
+				 [hidden]="!pointAlyVisible"
+
+			>
+				<canvas id="point-aly-canvas" class="fabric-canvas" ></canvas>
+			</div>
+
+			<div id="dif-wrapper" class="canvas-wrapper"
+				 [ngStyle]="{'width': getCanvasWidth() + 'px', 'height': getCanvasHeight() + 'px'}"
+				 [hidden]="!difVisible"
+			>
+
+				<canvas id="dif-canvas" class="fabric-canvas"></canvas>
+			</div>
+
+			<div id="plag-wrapper" class="canvas-wrapper"
+				 [ngStyle]="{'width': getCanvasWidth() + 'px', 'height': getCanvasHeight() + 'px'}"
+				 [hidden]="!plagVisible"
+			>
+
+				<canvas id="plag-canvas" class="fabric-canvas"></canvas>
+			</div>
+
+
+			<!--<div id="point-aly" class="canvas-wrapper" [ngStyle]="{'width': image.img_pix_w + 'px', 'height': image.img_pix_h + 'px'}"></div>-->
+		</div>
+	</md-card-content>
+</md-card>

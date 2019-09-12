@@ -1,0 +1,17 @@
+.mat-dialog-title {
+	margin: 0 0 5px;
+}
+
+md-dialog-content {
+	/*height: 100%;*/
+	overflow: hidden;
+	max-height: none;
+}
+
+.mat-dialog-container {
+	max-width: none;
+}
+
+md-tab-group {
+	margin-bottom: 10px;
+}

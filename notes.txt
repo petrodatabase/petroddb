@@ -1,0 +1,47 @@
+
+14 Oct:
+Users:
+    <generally done> Information edit
+
+Project:
+    <generally done> Project information changes
+
+<generally done> Point aly: regional annotation instead of whole part
+        -> need to fix bug in switch visibility (relatively fixed)
+        -> may have bugs in draging in different directions (not really)
+<done> date input
+
+15 Oct:
+<maybe not> Private email signup
+
+<done> Search Engine:
+            Sample search:
+            ....
+
+Week 9:
+<done> Fix date in eruption
+<done> Reporting system
+<done on sample, project>publicity
+<done, not displaying> reference
+
+Week 10:
+Saving new point analysis slow
+<done>re-plot of points after upload got error -> regenerate the square points
+
+week11:
+<>other options
+<caused by data not loaded>on select volcano of unknown, error with find
+
+incorporate reference to sample<done>, project
+
+
+
+vd_num vs vd_cavw xxxx vvvv
+
+coordinate (geographical) vvvv
+sample page order the name to be first vvvvv
+edit status in volcano not reflected. vvvvvv
+
+Link project to volcano table
+-> project table >> search by volcano, project and volcano are not linked
+-> in volcano page, what project it is. (almost)

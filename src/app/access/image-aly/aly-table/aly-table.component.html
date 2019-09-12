@@ -1,0 +1,98 @@
+<!--<div class="example-container mat-elevation-z8" [ngStyle]="{'max-width': _width + 'px'}">-->
+<div class="example-container mat-elevation-z8" [ngStyle]="{'width': '100%'}">
+	<div class="example-header">
+		<button md-button (click)="toggleSelectAll()">(De)select All</button>
+		<md-form-field floatPlaceholder="never">
+			<input mdInput #aly_filter placeholder="Filter Ref name">
+		</md-form-field>
+	</div>
+
+	<md-table #table [dataSource]="dataSource" [ngStyle]="{'max-height': _height + 'px'}">
+
+		<!--- Note that these columns can be defined in any order.
+			  The actual rendered columns are set as a property on the row definition" -->
+
+		<!-- ID Column -->
+		<!--<ng-container mdColumnDef="">-->
+		<!--<md-header-cell *mdHeaderCellDef> ID </md-header-cell>-->
+		<!--<md-cell *mdCellDef="let row"> {{row.id}} </md-cell>-->
+		<!--</ng-container>-->
+
+		<!-- Progress Column -->
+		<ng-container mdColumnDef="select">
+			<md-header-cell *mdHeaderCellDef> Select</md-header-cell>
+			<md-cell *mdCellDef="let row">
+				<md-checkbox
+						[(ngModel)]="selected[row.$key]">
+						<!--[disabled]="disabled">-->
+				</md-checkbox>
+			</md-cell>
+		</ng-container>
+
+		<ng-container mdColumnDef="ref_id">
+			<md-header-cell *mdHeaderCellDef> ID</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.ref_id}}</md-cell>
+		</ng-container>
+
+		<!--<ng-container mdColumnDef="ref_name">-->
+			<!--<md-header-cell *mdHeaderCellDef> Name</md-header-cell>-->
+			<!--<md-cell *mdCellDef="let row"> {{row.ref_name}}</md-cell>-->
+		<!--</ng-container>-->
+
+		<!-- Name Column -->
+		<ng-container mdColumnDef="color">
+			<md-header-cell *mdHeaderCellDef> Color</md-header-cell>
+			<md-cell *mdCellDef="let row" [style.color]="row.color"> {{row.color}}</md-cell>
+		</ng-container>
+
+		<!-- Color Column -->
+		<ng-container mdColumnDef="type">
+			<md-header-cell *mdHeaderCellDef> Type</md-header-cell>
+			<md-cell *mdCellDef="let row"> {{row.aly_type}}</md-cell>
+		</ng-container>
+
+		<ng-container mdColumnDef="instrument">
+			<md-header-cell *mdHeaderCellDef> Instrument</md-header-cell>
+			<!--<md-cell *mdCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>-->
+			<md-cell *mdCellDef="let row"> {{row.aly_instrument}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="pos_x">
+			<md-header-cell *mdHeaderCellDef> X</md-header-cell>
+			<!--<md-cell *mdCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>-->
+			<md-cell *mdCellDef="let row"> {{row.pos_x}}</md-cell>
+		</ng-container>
+		<ng-container mdColumnDef="pos_y">
+			<md-header-cell *mdHeaderCellDef> Y</md-header-cell>
+			<!--<md-cell *mdCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>-->
+			<md-cell *mdCellDef="let row"> {{row.pos_y}}</md-cell>
+		</ng-container>
+
+
+		<ng-container mdColumnDef="elementFilter">
+			<md-header-cell *mdHeaderCellDef>
+				<md-input-container>
+					<input type="text" mdInput [(ngModel)]="elementFilter" #eleFilter (change)="eleChange()" placeholder="Element">
+				</md-input-container>
+			</md-header-cell>
+			<!--<md-cell *mdCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>-->
+			<md-cell *mdCellDef="let row"> {{(row && row['data'] && row['data'][elementFilter] ) ? row['data'][elementFilter]['ele_val'] : 'NaN'}}</md-cell>
+		</ng-container>
+
+		<ng-container mdColumnDef="elementFilter2">
+			<md-header-cell *mdHeaderCellDef>
+				<md-input-container>
+					<input type="text" mdInput [(ngModel)]="elementFilter2" #eleFilter2 (change)="eleChange2()" placeholder="Element_2">
+				</md-input-container>
+			</md-header-cell>
+			<!--<md-cell *mdCellDef="let row" [style.color]="row.color"> {{row.color}} </md-cell>-->
+			<md-cell *mdCellDef="let row"> {{(row && row['data'] && row['data'][elementFilter2] ) ? row['data'][elementFilter2]['ele_val'] : 'NaN'}}</md-cell>
+		</ng-container>
+
+
+
+
+
+		<md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+		<md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+	</md-table>
+</div>

@@ -1,0 +1,68 @@
+md-input-container.newline {
+  width: 100%;
+	display: inline !important;
+}
+
+md-checkbox {
+	margin: 0 10px;
+}
+
+/*.autho-list {*/
+	/*max-height: 400px;*/
+	/*overflow-y: auto;*/
+/*}*/
+
+.input-field {
+	display: inline-block;
+	width: 50%;
+}
+
+.input-container {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+/*canvas {*/
+/*z-index: 500;*/
+/*}*/
+
+.example-margin {
+	margin: 0 10px;
+}
+
+.checkbox-label {
+	margin-top: 15px;
+}
+
+.mat-selection-list .mat-list-option {
+	display: inline;
+}
+.mat-list-item-content .mat-list-item-content-reverse {
+	display: inline;
+}
+
+.mat-selection-list .mat-list-option .mat-list-item-content-reverse {
+	display: inline;
+}
+
+.mat-selection-list .mat-list-option .mat-list-text {
+	display: inline;
+
+}
+
+.mat-list-option {
+	width: 33%;
+}
+
+.mat-list-text {
+	font-size: small;
+}
+
+.mat-list .mat-list-option .mat-list-text, .mat-nav-list .mat-list-option .mat-list-text, .mat-selection-list .mat-list-option .mat-list-text {
+	display: inline !important;
+}
+
+.check-box-div {
+	width: 25%;
+	display: inline-block;
+}

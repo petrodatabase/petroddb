@@ -1,0 +1,155 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="input-field" mdTooltip="{{schema['proj_pi']['tooltip'] || 'proj_pi'}}">
+    <md-select
+      placeholder="{{schema['proj_pi']['placeholder'] || 'proj_pi'}}"
+      formControlName="proj_pi"
+      id="proj_pi"
+    >
+      <md-option [value]="">Unknown</md-option>
+      <md-option *ngFor="let us of piList" [value]="us.$key">
+        {{(us.us_family != '' && us.us_first != '') ? (us.us_first + ' ' + us.us_family) : us.displayName}}
+      </md-option>
+    </md-select>
+  </div>
+
+  <!--<div class="input-field" mdTooltip="{{schema['proj_contact']['tooltip'] || 'proj_contact'}}">-->
+    <!--<md-select-->
+      <!--placeholder="{{schema['proj_contact']['placeholder'] || 'proj_contact'}}"-->
+      <!--formControlName="proj_contact"-->
+      <!--id="proj_contact"-->
+    <!--&gt;-->
+      <!--<md-option [value]="">Unknown</md-option>-->
+      <!--<md-option *ngFor="let us of userList" [value]="us.$key">-->
+        <!--{{(us.us_family != '' && us.us_first != '') ? (us.us_first + ' ' + us.us_family) : us.displayName}}-->
+      <!--</md-option>-->
+    <!--</md-select>-->
+  <!--</div>-->
+
+  <div class="input-field" mdTooltip="{{schema['proj_creator']['tooltip'] || 'proj_creator'}}">
+    <md-select
+      placeholder="{{schema['proj_creator']['placeholder'] || 'proj_creator'}}"
+      formControlName="proj_creator"
+      id="proj_creator"
+    >
+      <md-option [value]="">Unknown</md-option>
+      <md-option *ngFor="let us of userList" [value]="us.$key">
+        {{(us.us_family != '' && us.us_first != '') ? (us.us_first + ' ' + us.us_family) : us.displayName}}
+      </md-option>
+    </md-select>
+  </div>
+
+  <div *ngFor="let k of formIncludeFields"
+       class="input-field" style="margin-top:20px;"
+       mdTooltip="{{schema[k]['tooltip'] || k}}"
+  >
+    <md-input-container
+      *ngIf="['string', 'number'].indexOf(schema[k].type) > -1"
+    >
+      <input mdInput
+             placeholder="{{schema[k]['placeholder'] || k}}"
+             formControlName="{{k}}"
+             id="{{k}}"
+             type="{{schema[k].type === 'string' ? 'text' : (schema[k].type === 'number' ? 'number' : (schema[k].type === 'boolean' ? 'checkbox' : 'text'))}}"
+      >
+      <!-- TODO for array -->
+      <md-error>This field is required</md-error>
+    </md-input-container>
+
+  </div>
+
+  <div class="row">
+    <md-checkbox
+      [(ngModel)]= "isPrivate"
+      [ngModelOptions]="{standalone: true}"
+      (click) ="updateAccess(isPrivate)"
+    >
+      {{reference['isPrivate']['placeholder'] || 'isPrivate'}}
+    </md-checkbox>
+
+    <md-checkbox
+      [(ngModel)]="isReadonlyAccess"
+      [ngModelOptions]="{standalone: true}"
+      (click) ="updateAccess(isReadonlyAccess)"
+    >
+      {{reference['isReadonlyAccess']['placeholder'] || 'isReadonlyAccess'}}
+    </md-checkbox>
+
+    <md-checkbox
+      [(ngModel)]="isPublicAccess"
+      [ngModelOptions]="{standalone: true}"
+      (click) ="updateAccess(isPublicAccess)"
+    >
+      {{reference['isPublicAccess']['placeholder'] || 'isPublicAccess'}}
+    </md-checkbox>
+
+    <md-checkbox
+      [(ngModel)]="isCustomized"
+      [ngModelOptions]="{standalone: true}"
+      (click) ="updateAccess(isCustomized)"
+    >
+      {{reference['isCustomized']['placeholder'] || 'isCustomized'}}
+    </md-checkbox>
+  </div>
+
+
+  <div style="color:red">
+    <p [hidden]="!isPrivate" >
+      <em>*Note: This project is only visible and fully editable by PI, Creator, Contact.</em>
+    </p>
+    <p [hidden]="!isReadonlyAccess">
+      <em>*Note: This project is visible to everyone. However, only PI, Creator, Contact can fully edit.</em>
+    <p [hidden]="!isPublicAccess" >
+      <em>*Note: This project is visible and editable by everyone. However, authorization only can be granted by PI or Creator.</em>
+    </p>
+    <p [hidden]="!isCustomized">
+      <em>*Note: This project is visible and editable by anyone who is assigned below. However, authorization only can be granted by PI or Creator.</em>
+
+    </p>
+  </div>
+  <div [hidden]="!isCustomized" mdTooltip="{{schema['proj_autho']['tooltip'] || 'proj_autho'}}">
+    <div class="card-container">
+      <label for="" fxFlex="10" class="checkbox-label">{{schema['proj_autho']['placeholder']}}</label>
+      <div fxFlex="90" class="autho-list">
+        <div>
+          <div>
+            <ngx-select [multiple]="true"
+                        [items]="userlisttoString"
+                        [disabled]="ngxDisabled"
+                        [(ngModel)]="authorFull"
+                        placeholder="No authors selected"
+                        [ngModelOptions]="{standalone: true}" >
+            </ngx-select>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="100">
+        <hr>
+      </div>
+    </div>
+  </div>
+
+  <div [hidden]="!isCustomized" mdTooltip="{{schema['proj_autho_read_only']['tooltip'] || 'proj_autho_read_only'}}">
+    <div class="card-container">
+      <label for="" fxFlex="10" class="checkbox-label">{{schema['proj_autho_read_only']['placeholder']}}</label>
+      <div fxFlex="90" class="autho-list">
+        <div>
+          <div>
+            <ngx-select [multiple]="true"
+                        [items]="userlisttoString"
+                        [disabled]="ngxDisabled"
+                        [(ngModel)]="authorRead"
+                        placeholder="No authors selected"
+                        [ngModelOptions]="{standalone: true}" >
+            </ngx-select>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="100">
+        <hr>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <button type="submit" [disabled]="!form.valid" md-raised-button color="primary">Submit</button>
+</form>

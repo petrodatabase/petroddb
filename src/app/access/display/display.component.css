@@ -1,0 +1,25 @@
+.google-map {
+	height: 400px;
+}
+.map-des {
+	font-size: small;
+}
+
+agm-map {
+	height: 400px;
+}
+
+.link-list {
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.link-button {
+	width: 100%;
+	text-align: left;
+}
+
+.link-label {
+	width: 25%;
+	text-align: left;
+}

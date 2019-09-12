@@ -1,0 +1,53 @@
+<div class="card-container">
+	<!--<div fxLayout="row" fxLayoutAlign="space-around center" >	-->
+	<div fxFlex="100">
+		<md-card>
+			<!--<md-card-title>Input</md-card-title>-->
+			<md-card-content>
+				<!--<img src="/assets/img/volcanoes-masthead.png" alt="Volcano">-->
+				<md-tab-group class="tab-group" dynamicHeight [(selectedIndex)]="tabIndex">
+					<md-tab>
+						<ng-template md-tab-label>New Project</ng-template>
+						<div class="tab-content">
+							<app-new-project [targetTabIndex]="0" [tabIndex]="tabIndex"></app-new-project>
+						</div>
+					</md-tab>
+					<md-tab>
+						<ng-template md-tab-label>New Sample</ng-template>
+						<div class="tab-content">
+							<!--<form [formGroup]="myForm" (ngSubmit)="onSubmit()">-->
+							<app-new-sample [targetTabIndex]="1" [tabIndex]="tabIndex"></app-new-sample>
+						</div>
+					</md-tab>
+					<md-tab>
+						<ng-template md-tab-label>New Volcano</ng-template>
+						<div class="tab-content">
+							<app-new-volcano [targetTabIndex]="2" [tabIndex]="tabIndex"></app-new-volcano>
+						</div>
+					</md-tab>
+					<md-tab>
+						<ng-template md-tab-label>New Eruption</ng-template>
+						<div class="tab-content">
+							<app-new-eruption [targetTabIndex]="3" [tabIndex]="tabIndex"></app-new-eruption>
+						</div>
+					</md-tab>
+					<md-tab>
+						<ng-template md-tab-label>New Reference</ng-template>
+						<div class="tab-content">
+							<app-new-reference [targetTabIndex]="4" [tabIndex]="tabIndex"></app-new-reference>
+						</div>
+					</md-tab>
+					<!--<md-tab>-->
+						<!--<ng-template md-tab-label>New Observatory</ng-template>-->
+						<!--<div class="tab-content">-->
+							<!--<app-new-observatory></app-new-observatory>-->
+						<!--</div>-->
+					<!--</md-tab>-->
+
+
+				</md-tab-group>
+			</md-card-content>
+		</md-card>
+	</div>
+
+</div>

@@ -1,0 +1,38 @@
+{
+  "sp_name": "Test Sample",
+  "ed": null,
+  "vd": null,
+  "proj": null,
+  "sp_amount": "amount ashdlasjkdjasd,",
+  "sp_collector": null,
+  "sp_lat": 13.25699997,
+  "sp_lon": 123.6849976,
+  "sp_alt": 124,
+  "workspaces": [],
+  "img": [],
+  "subSp": [],
+  "linkf_list": [],
+  "charts": [],
+  "sp_autho": [],
+  "sp_coldate": "01/01/2017",
+  "sp_sloc_room": "nothing in the room",
+  "sp_sloc": "nothing in slock",
+  "sp_sdata": "no data at all",
+  "sp_remark": "no remoark",
+  "sp_obs": "no observation",
+  "ref_fram": "the fram",
+  "datum": "asidhiasjdasjdh",
+  "projection": "ASgfasgasg",
+  "sp_type": [
+    "type 1",
+    "type2 "
+  ],
+  "sp_rocktype": [
+    "type 1",
+    "type2 "
+  ],
+  "sp_rockcomp": [
+    "type 1 comp1",
+    "type2 cpmep"
+  ]
+}

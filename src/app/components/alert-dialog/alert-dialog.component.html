@@ -1,0 +1,15 @@
+<h2 md-dialog-title>{{data['title'] || 'Alert'}}</h2>
+
+<md-dialog-content>
+
+  <p [innerHTML]="data.content"></p>
+</md-dialog-content>
+
+<!--<md-dialog-actions [attr.align]="actionsAlignment">-->
+<md-dialog-actions >
+  <button
+          md-raised-button
+          color="primary"
+          (click)="onCloseCancel()">OK
+  </button>
+</md-dialog-actions>
