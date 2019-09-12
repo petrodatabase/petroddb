@@ -8,8 +8,6 @@ The back end is using NodeJS
 
 The Database is Mongodb and Firebase
 
-The cloud demo version of this website is on : https://eos-volcano-petrology.firebaseapp.com/home
-
 
 # Software preparation
 
@@ -48,14 +46,6 @@ Note: The API server is running on localhost:4000, The image server is running o
 # Deploy server
 
 For Deploying purpose. Follow the following steps:
-
-0/ Change all the url in all files from developing server to deploy server
-
-1/ Ask Christina or whoever is the supervisor to contact Edwin -the technician to grant access to the server machine
-
-2/ Using Filezilla to copy all files from developer's machine to the server machine
-
-3/ Use MobaXterm to deploy (ask Edwin for help, this is quite complicated to write down)
 
       npm run build -prod --aot
 
