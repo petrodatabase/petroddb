@@ -43,24 +43,6 @@ For developing purpose, run on localhost. Follow the following steps
 Note: The API server is running on localhost:4000, The image server is running on localhost:7777
 
 
-# Deploy server
-
-For Deploying purpose. Follow the following steps:
-
-      npm run build -prod --aot
-
-      deploy node 
-
-      pm2 start /home/ngoctuan001/EOS_MONGO/server.js --watch
-
-      deploy http-server
-
-      pm2 start /usr/local/node/bin/http-server -- -p 7777 --watch
-
-      SSL Cert:
-
-      "start": "ng serve --public-host https://petro.wovodat.org --port 4444 --ssl true --ssl-cert /usr/local/STAR_wovodat/STAR_wovodat_org.crt --ssl-key /usr/local/STAR_wovodat/wovodat.org --host=155.69.202.44 --disable-host-check",
-
 # Files need to change the url when alternate between deploy and develop server. Please refer to the comment in the file
 
 global.ts
